@@ -1,0 +1,23 @@
+.pageContainer{
+    display: grid;
+    flex-grow: 1;
+}
+
+.formContainer{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    row-gap: 30px;
+    justify-self: center;
+}
+
+.inputs{
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    width: 400px;
+}
+
+.link{
+    color: var(--black);
+}

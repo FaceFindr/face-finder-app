@@ -1,0 +1,16 @@
+.pageHeader{
+    display: flex;
+    justify-content: space-between;
+}
+.buttonIcon{
+    width: 1rem;
+    height: 1rem;
+
+}
+.albumsContainer{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    column-gap: 35px;
+    row-gap: 20px;
+}
