@@ -10,7 +10,8 @@
 
 /* Sizes */
 .btnSmall{
-    height: 30px;
+    height: 40px;
+    width: 50px;
 }
 .btnMedium{
     width: 200px;
@@ -36,10 +37,10 @@
     background-color: white;
     color: var(--main);
 }
-.btnOutlined:hover{
+/* .btnOutlined:hover{
     border:0;
     background-color: var(--main-hover);
     color: white;
-}
+} */
 
 

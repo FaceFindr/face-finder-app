@@ -1,5 +1,11 @@
 .navContainer{
     height: 70px;
     width: 100vw;
+    border:1px solid var(--ligth-gray);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    display: flex;
+    align-items: center;
+    color: white;
     background-color: var(--main);
+    padding: 0 80px;
 }

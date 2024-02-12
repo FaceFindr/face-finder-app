@@ -2,31 +2,30 @@ import Text from '../../atoms/text/Text';
 import { FaRegCalendar } from "react-icons/fa";
 import { FaTag } from "react-icons/fa6";
 import albumCardStyle from './albumCardStyle.module.css';
+import { ALBUM_VISIBILITY } from '@/src/constants/album';
 
-export default function AlbumCard(){
+export type AlbumThumb = {
+    date: string
+    label:string,
+    visibility:ALBUM_VISIBILITY
+}
+export default function AlbumCard({date, label, visibility}: AlbumThumb){
     return (
         <div className={albumCardStyle.cardContainer}>
-            <div className={albumCardStyle.image}>
-                image
+            <div className={albumCardStyle.albumThumb}>
             </div>
-            <div className={albumCardStyle.description}>
-                <div>
-                    <Text text='Album name'/>
+            
+            <div className={albumCardStyle.albumDescription}>
+                <div className={albumCardStyle.albumDescriptionCell}>
+                    <FaRegCalendar/>
+                    <Text text={date}/>
                 </div>
-                <div className={albumCardStyle.descriptionCaption}>
-                    <div className={albumCardStyle.iconLabel} >
-                        <FaRegCalendar />
-                        <Text text='Date'/>
-                    </div>
-                    <div className={albumCardStyle.iconLabel}>
-                        <FaTag />
-                        <Text text='Label'/>
-                    </div>
-                    <div className={albumCardStyle.iconLabel}>
-                        <Text text='Visibility'/>
-                    </div>
-                   
-                    
+                <div className={albumCardStyle.albumDescriptionCell}>
+                    <FaTag/>
+                    <Text text={label}/>
+                </div>
+                <div className={albumCardStyle.albumDescriptionCell}>
+                    <Text text={visibility}/>
                 </div>
             </div>
         </div>
