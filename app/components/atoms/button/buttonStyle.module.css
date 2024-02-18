@@ -14,11 +14,11 @@
     width: 50px;
 }
 .btnMedium{
-    width: 200px;
+    width: 100px;
     height: 40px;
 }
 .btnBig{
-    width: 300px;
+    width: 200px;
     height: 40px;
 }
 .btnFull{
@@ -37,10 +37,10 @@
     background-color: white;
     color: var(--main);
 }
-/* .btnOutlined:hover{
+.btnSave{
     border:0;
-    background-color: var(--main-hover);
+    background-color: #6CA468;
     color: white;
-} */
+}
 
 

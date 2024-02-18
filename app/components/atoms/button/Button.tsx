@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 
 type ButtonProps={
     text: string;
+    onClick?: () => void;
     size?: ButtonSize;
     variant?: ButtonVariant;
     icon?: ReactNode;
@@ -19,12 +20,14 @@ export enum ButtonSize {
 
 export enum ButtonVariant {
     CONTAINED, 
-    OUTLINED
+    OUTLINED, 
+    SAVE,
 }
 
 export default function Button({
     text, 
-    size = ButtonSize.MEDIUM, 
+    onClick,
+    size = ButtonSize.BIG, 
     variant= ButtonVariant.CONTAINED, 
     icon, 
     type
@@ -48,6 +51,8 @@ export default function Button({
         switch (variant) {
             case ButtonVariant.CONTAINED:
                 return buttonStyle.btnContained;
+            case ButtonVariant.SAVE:
+                return buttonStyle.btnSave;
             default:
                 return buttonStyle.btnOutlined;
         }
@@ -62,6 +67,7 @@ export default function Button({
 
     return (
         <button 
+            onClick={onClick}
             className={buttonClasses()}
             type= {type}
         >
