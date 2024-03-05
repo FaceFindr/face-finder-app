@@ -1,5 +1,4 @@
 import NavBar from '../components/molecules/navBar/NavBar';
-import layoutStyle from './layoutStyle.module.css'
 
 export default function AlbumsLayout({children}:{children:React.ReactNode}){
     return (
@@ -7,7 +6,7 @@ export default function AlbumsLayout({children}:{children:React.ReactNode}){
             <div>
                 <NavBar/>
             </div>
-            <div className={layoutStyle.pageContainer}>
+            <div style={{padding:"100px 80px 100px 80px"}}>
                 {children}
             </div> 
         </div>

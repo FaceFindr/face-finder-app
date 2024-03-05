@@ -5,7 +5,22 @@
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     color: white;
     background-color: var(--main);
     padding: 0 80px;
+}
+.logo{
+    cursor: pointer;
+}
+
+.authLinks{
+    display: flex;
+    column-gap: 10px;
+}
+
+.authLink{
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
 }

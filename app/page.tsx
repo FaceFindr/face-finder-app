@@ -1,13 +1,20 @@
-import { AiFillEye } from "react-icons/ai";
-import Button, { ButtonSize, ButtonVariant } from "./components/atoms/button/Button";
-import Input from "./components/atoms/input/Input";
-import './globals.css'
+import NavBar from "./components/molecules/navBar/NavBar";
+import PublicAlbumsList from "./components/organisms/publicAlbumsList/PublicAlbumsList";
 
 
-export default function Home() {
-  return (
-    <main >
+export default function HomePage(){
+    return (
+      <div>
+        
+        <div>
+          <NavBar isHomePage/>
+        </div>
+
+        <div style={{padding:"100px 80px 100px 80px"}}>
+          <PublicAlbumsList />
+        </div> 
+
+      </div>
      
-    </main>
-  );
+    );
 }

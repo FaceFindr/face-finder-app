@@ -26,21 +26,7 @@ export default function Modal({title, content, onClose}:ModalProps){
 
                 <div className={modalStyle.modalContent}>
                     {content}
-                </div>
-
-                <div className={modalStyle.modalFooter}>
-                    <Button 
-                        text='Cancel' 
-                        size={ButtonSize.MEDIUM} 
-                        onClick={onClose}
-                    />
-                    <Button 
-                        text='Save' 
-                        variant={ButtonVariant.SAVE} 
-                        size={ButtonSize.MEDIUM}
-                        
-                    />
-                </div>
+                </div>       
             </div>
         </div>
         

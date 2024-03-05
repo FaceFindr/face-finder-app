@@ -19,9 +19,5 @@
     margin-top: 20px;
     column-gap: 35px;
     row-gap: 20px;
-    justify-content: center;
-}
-
-.iconFilter{
-    color: var(--main);
+ 
 }

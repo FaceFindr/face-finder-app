@@ -13,8 +13,7 @@ export default function SignUp(){
 
     return (
         <div className={baseAuthStyle.pageContainer}>
-
-            <form className={baseAuthStyle.formContainer} method="post">
+            <form className={baseAuthStyle.formContainer} method="post" >
                 <div className={signUpStyle.headersContainer}>
                     <Text text="Create an account"  type={TextTypes.HEADER}/>
                     <Text text="Let's get started!"  />
@@ -42,8 +41,7 @@ export default function SignUp(){
                         }
                     />
                     
-                </div>
-                
+                </div>  
                 <div>
                     <div className={signUpStyle.buttonsContainer}>
                         <Button text="Sign up" type="submit" size={ButtonSize.FULL}/>

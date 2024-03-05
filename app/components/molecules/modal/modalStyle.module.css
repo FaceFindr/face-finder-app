@@ -17,16 +17,17 @@
 }
 .modalContainer{
     width: 45%;
-    height: 80%;
     background-color: white;
     border-radius: 6px;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    
-    
     padding: 30px 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.modalHeader{
+    margin-bottom: 30px;
 }
 
 .closeModal{
@@ -40,10 +41,4 @@
 .modalContent{
     min-height: 80%;
     display: flex;
-}
-
-.modalFooter{
-    display: flex;
-    column-gap: 2rem;
-    justify-content: flex-end;
 }

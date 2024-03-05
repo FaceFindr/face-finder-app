@@ -9,8 +9,6 @@ export type FileUploadProps ={
     onUpload:(acceptedFiles:any)=>void;
 }
 export default function FileUpload({onUpload}: FileUploadProps){
-    const [uploadedFiles, setUploadedFiles] = useState([]);
-
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
             'image/*': ['.jpeg', '.png']

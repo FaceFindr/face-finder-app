@@ -5,14 +5,15 @@ import albumCardStyle from './albumCardStyle.module.css';
 import { ALBUM_VISIBILITY } from '@/src/constants/album';
 
 export type AlbumThumb = {
+    id:string
     date: string
-    label:string,
+    label:string
     visibility:ALBUM_VISIBILITY
 }
-export default function AlbumCard({date, label, visibility}: AlbumThumb){
+export default function AlbumCard({id, date, label, visibility}: AlbumThumb){
     return (
         <div className={albumCardStyle.cardContainer}>
-            <div className={albumCardStyle.albumThumb}>
+            <div className={albumCardStyle.albumThumb} onClick={()=>window.location.assign(`/albums/${id}`)}>
             </div>
             
             <div className={albumCardStyle.albumDescription}>

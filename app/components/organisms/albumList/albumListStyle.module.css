@@ -1,0 +1,49 @@
+.headerContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.titleContainer{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+.headerButtons{
+    display: flex;
+    column-gap: 10px;
+}
+
+.buttonIcon{
+    width: 1rem;
+    height: 1rem;
+}
+.dropZone{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30vh;
+}
+.photosContainer{
+    /* display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    column-gap: 35px;
+    row-gap: 20px; */
+    -moz-column-count:3;
+    -moz-column-gap: 1%;
+    -moz-column-width: 30%;
+    -webkit-column-count:3;
+    -webkit-column-gap: 3%;
+    -webkit-column-width: 30%;
+    column-count: 3;
+    column-gap: 1%;
+    column-width: 30%;
+}
+.photo{
+    max-width: 400px;
+    max-height: 600px;
+    width: auto;
+    height: auto;
+    background-color: whitesmoke;
+}

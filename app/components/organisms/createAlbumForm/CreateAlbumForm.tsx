@@ -1,35 +1,39 @@
 import { useState } from "react";
-import FileUpload from "../../molecules/fileUpload/fileUpload";
 import createAlbumStyle from "./createAlbumStyle.module.css"
 import Input from "../../atoms/input/Input";
 import Text from "../../atoms/text/Text";
-import { ReactMultiEmail } from "react-multi-email";
-import MultiEmailInput from "../../molecules/multiEmail/MultiEmailInput";
+import Button, { ButtonSize, ButtonVariant } from "../../atoms/button/Button";
 
 
-export default function CreateAlbumForm(){
-    const [uploadedFiles, setUploadedFiles] = useState([]);
-    const [supervisors, setSupervisors] = useState<string[]>([]);
+export type CreateAlbumForm = {
+    onCancel:()=>void
+    onSubmit:(params:any)=>void
+}
 
+export default function CreateAlbumForm({onCancel, onSubmit}: CreateAlbumForm){
     return(
-        <>
-            {
-                uploadedFiles.length ?
-                <div className={createAlbumStyle.createForm}>
-                    <Input name="albumName" placeholder="Album name"/>
-
-                    <MultiEmailInput
-                        title="Supervisors"
-                        emails={supervisors}
-                        onChange={setSupervisors}
-                    />
-                    
-    
-
-                    <Text text="Participants: "/>
-                </div>
-                : <FileUpload onUpload={setUploadedFiles}/>
-            }
-         </>
+        <form className={createAlbumStyle.createForm} onSubmit={onSubmit} method="POST">
+            <Input name="title" placeholder="Album Title"/>
+            <Input name="description" placeholder="Description"/>
+            <Input name="label" placeholder="Label"/>
+            <div className={createAlbumStyle.checkboxContainer}>
+                <input type="checkbox" name="isPublic" className={createAlbumStyle.checkbox}/>
+                <Text text="This is a public album"/>
+            </div> 
+            <div className={createAlbumStyle.formFooter}>
+                <Button 
+                    text='Cancel' 
+                    size={ButtonSize.MEDIUM} 
+                    onClick={onCancel}
+                />
+                <Button 
+                    text='Save' 
+                    variant={ButtonVariant.SAVE} 
+                    size={ButtonSize.MEDIUM}
+                    type="submit"
+                />
+            </div>
+     
+        </form>
     );
 }
