@@ -5,15 +5,43 @@ import signUpStyle from "./signUpStyle.module.css"
 import baseAuthStyle from "../baseAuthStyle.module.css"
 import Text, { TextTypes } from "@/app/components/atoms/text/Text";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import Link from "next/link";
-
 export default function SignUp(){
     const [showPassword, setShowPassword] = useState(false)
 
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.target as HTMLFormElement);
+        const email = formData.get('email');
+        const password = formData.get('password');
+        const name = formData.get('text');
+        
+        const response = await fetch('http://127.0.0.1:8000/auth/sign-up', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password, name })
+        });
+
+        if (response.ok) {
+            console.log('User created sucessfully');            
+            window.location.replace("/auth/logIn")
+        } else {
+            const data = await response.json();
+            if (data.error === "A user with this email already exists") {
+                alert("A user with this email already exists");
+            } else {
+                console.error('Error creating user');
+            }
+        }
+
+    }
+
     return (
         <div className={baseAuthStyle.pageContainer}>
-            <form className={baseAuthStyle.formContainer} method="post" >
+            <form className={baseAuthStyle.formContainer} method="post" onSubmit={handleSubmit}>
                 <div className={signUpStyle.headersContainer}>
                     <Text text="Create an account"  type={TextTypes.HEADER}/>
                     <Text text="Let's get started!"  />
@@ -45,7 +73,6 @@ export default function SignUp(){
                 <div>
                     <div className={signUpStyle.buttonsContainer}>
                         <Button text="Sign up" type="submit" size={ButtonSize.FULL}/>
-                        <Button text="Continue with email" size={ButtonSize.FULL} variant={ButtonVariant.OUTLINED}/>   
                     </div>
                     <div style={{marginTop:"10px"}}>
                         <Text text="Already have an account?" type={TextTypes.CAPTION} />

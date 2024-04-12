@@ -39,18 +39,20 @@ export default function AlbumList({albumId}: AlbumListProps){
 
     const handlePhotoAddition = (files:File[])=>{
         const formData = new FormData();
-        formData.append('file', files[0]);
-
+       
+        [...files].forEach((file) => {
+            formData.append("files", file);
+        });
+          
         fetch(`http://127.0.0.1:8000/photo/${albumId}`, {
             method:"POST", 
             body:formData
         })
         .then((res) => {
-            return res.json();
-        })
-        .then((data) => {
+            console.log(res.json())
             setUploadModalOpen(false)
             loadPhotos()
+            return res.json();
         }).catch((error)=>{
             console.log(error)
         })
@@ -62,7 +64,6 @@ export default function AlbumList({albumId}: AlbumListProps){
             return res.json();
         })
         .then((data) => {
-            console.log(data)
             setPhotos(data);
         }).catch((error)=>{
             console.log(error)
@@ -109,18 +110,10 @@ export default function AlbumList({albumId}: AlbumListProps){
                     photos.map((photo:any, index)=>{
                         return (
                             <div>
-                                <img key={index} className={albumListStyle.photo} src={photo.image_url}/>
-                            </div>
-                            
+                                <img key={index} className={albumListStyle.photo} src={photo.image_key}/>
+                            </div>  
                         )
                     })
-                    // test.map((photo)=>{
-                    //     return (
-                    //         <div className={albumListStyle.photo}>
-
-                    //         </div>
-                    //     );
-                    // })
                 }
             </div>
             {uploadModalOpen &&
