@@ -1,16 +1,15 @@
 'use client'
-import Button, { ButtonSize } from "@/app/components/atoms/button/Button";
+import Button, { ButtonSize, ButtonVariant } from "@/app/components/atoms/button/Button";
 import Input from "@/app/components/atoms/input/Input";
-import loginStyle from "./loginStyle.module.css";
+import changePassStyle from "./changePassStyle.module.css";
 import baseAuthStyle from "../baseAuthStyle.module.css"
 import Text, { TextTypes } from "@/app/components/atoms/text/Text";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from 'react';
 
-export default function LogIn(){
+export default function forgot(){
     const [showPassword, setShowPassword] = useState(false)
 
 
@@ -21,23 +20,23 @@ export default function LogIn(){
         const password = formData.get('password');
      
     
-        const response = await fetch('http://127.0.0.1:8000/auth/login', {
+        const response = await fetch('http://127.0.0.1:8000/auth/changePass', { //change password
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password, name })
+            body: JSON.stringify({ email, password })
         });
     
         if (response.ok) {
-            console.log('User logged in successfully');            
+            console.log('password changed successfully');            
             window.location.replace("/albums")
         } else {
             const data = await response.json();
             if (data.error === "This user does not exist") {
                 alert("This user does not exist");
             } else {
-                console.error('Error logging in');
+                console.error('Error changing password: ');
             }
         }
     }
@@ -45,40 +44,51 @@ export default function LogIn(){
         <div className={baseAuthStyle.pageContainer} >
 
             <form className={baseAuthStyle.formContainer} method="post" onSubmit={handleSubmit}>
-                <Text text="Log in"  type={TextTypes.HEADER}/>
+                <Text text="Set New Password"  type={TextTypes.HEADER}/>
 
-                <div className={baseAuthStyle.inputs}>
-                    <Input placeholder="Email" name="email" required/>
-
-                    <div>
+                <div>
                         <Input 
-                            placeholder="Password" 
-                            name="password" 
-                            type={showPassword?"text": "password"} 
+                            placeholder="New Password" 
+                            name="new_password" 
+                            type={showPassword?"text": "new_password"} 
                             required
                             icon={
                                 showPassword?
                                 <AiFillEye 
-                                    className={loginStyle.passIcon}
+                                    className={changePassStyle.passIcon}
                                     onClick={()=>setShowPassword(!showPassword)}
                                 />
                                 :
                                 <AiFillEyeInvisible 
-                                    className={loginStyle.passIcon}
+                                    className={changePassStyle.passIcon}
                                     onClick={()=>setShowPassword(!showPassword)}
                                 />
                             }
                         />
-                        <a href="forgot" ><Text text="Forgot your password?" type={TextTypes.CAPTION}/></a> 
-                    </div>
                 </div>
 
-                <Button text="Login" type="submit" size={ButtonSize.FULL}/>
-
-                <div className={loginStyle.createAccountDiv}>
-                    <Text text="Don't have an account?" type={TextTypes.CAPTION} />
-                    <Link href="signUp"><Text text="Create an account" type={TextTypes.CAPTION}/></Link> 
+                <div>
+                        <Input 
+                            placeholder="Repeat New Password" 
+                            name="repeat_password" 
+                            type={showPassword?"text": "repeat_password"} 
+                            required
+                            icon={
+                                showPassword?
+                                <AiFillEye 
+                                    className={changePassStyle.passIcon}
+                                    onClick={()=>setShowPassword(!showPassword)}
+                                />
+                                :
+                                <AiFillEyeInvisible 
+                                    className={changePassStyle.passIcon}
+                                    onClick={()=>setShowPassword(!showPassword)}
+                                />
+                            }
+                        />
                 </div>
+
+                <Button text="Change Password" type="submit" size={ButtonSize.FULL}/>
 
             </form>
             
