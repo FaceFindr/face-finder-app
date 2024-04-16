@@ -15,6 +15,7 @@ export default function forgot(){
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
         const email = formData.get('email');
+        console.log(email);
      
         const response = await fetch('http://127.0.0.1:8000/auth/forgot', { //check if email exists on database
             method: 'POST',
@@ -26,7 +27,6 @@ export default function forgot(){
     
         if (response.ok) {
             console.log('Email exists, sending email with instructions to reset password');            
-            window.location.replace("/changePass")
         } else {
             const data = await response.json();
             if (data.error === "This user does not exist") {
@@ -45,7 +45,7 @@ export default function forgot(){
                 <Text text="You will be sent an email with more information "  type={TextTypes.TEXT}/>
 
                 <div className={baseAuthStyle.inputs}>
-                    <Input placeholder="Email" name="email" required/>                    
+                    <Input placeholder="Email" name="email" required/>             
                 </div>
 
                 <Button text="Submit" type="submit" size={ButtonSize.FULL}/>

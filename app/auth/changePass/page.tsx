@@ -8,24 +8,34 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function forgot(){
     const [showPassword, setShowPassword] = useState(false)
+    const router = useRouter();
+    const [token, setToken] = useState<string| string[] | undefined>("");
 
-
+    useEffect(() => {
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        setToken(hashParams.get('access_token') || "");
+    }, []);
+         
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
-        const email = formData.get('email');
-        const password = formData.get('password');
-     
-    
+        const newPassword = formData.get('new_password');
+        const repeatPassword = formData.get('repeat_password');
+        if(newPassword !== repeatPassword){
+            alert("Passwords don't match");
+            return;
+        }
         const response = await fetch('http://127.0.0.1:8000/auth/changePass', { //change password
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ password: newPassword })
         });
     
         if (response.ok) {
