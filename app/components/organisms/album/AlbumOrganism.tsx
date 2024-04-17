@@ -11,7 +11,7 @@ import Modal from "../../molecules/modal/Modal";
 import FileUpload from "../../molecules/fileUpload/fileUpload";
 import CreatePhotoModal from "../createPhotoModal/CreatePhotoModal";
 import { PersonCard } from "../../molecules/personCard/PersonCard";
-
+import { getAuthHeaders } from "@/app/utils/requestHeader";
 import dynamic from 'next/dynamic';
 import StandartHeader from "../../molecules/standardHearder/StandardHeader";
 
@@ -33,7 +33,8 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     const [uploadModalOpen, setUploadModalOpen] = useState(false)
 
     useEffect(()=>{
-        fetch(`http://127.0.0.1:8000/albums/${albumId}`)
+        const headers = getAuthHeaders();
+        fetch(`http://127.0.0.1:8000/albums/${albumId}`, { headers })
         .then((res) => {
             return res.json();
         })
@@ -51,10 +52,12 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         [...files].forEach((file) => {
             formData.append("files", file);
         });
-          
+
+        const headers = getAuthHeaders();
         fetch(`http://127.0.0.1:8000/photo/${albumId}`, {
             method:"POST", 
-            body:formData
+            body:formData,
+            headers
         })
         .then((res) => {
             console.log(res.json())
@@ -67,7 +70,8 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     }
 
     const loadPhotos = ()=>{
-        fetch(`http://127.0.0.1:8000/photo/${albumId}`)
+        const headers = getAuthHeaders();
+        fetch(`http://127.0.0.1:8000/photo/${albumId}`, { headers })
         .then((res) => {
             return res.json();
         })

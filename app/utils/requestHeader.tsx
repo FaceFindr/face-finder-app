@@ -1,12 +1,10 @@
 import Cookies from 'js-cookie';
 
-export default function getAuthHeaders (){
-    console.log(headers)
+export const getAuthHeaders = () => {
     const jwtToken = Cookies.get('jwtToken');
-    let headers = {};
+    let headers: Record<string, string> = {};
     if (jwtToken) {
         headers['Authorization'] = `Bearer ${jwtToken}`;
     }
-    console.log(headers)
     return headers;
 }

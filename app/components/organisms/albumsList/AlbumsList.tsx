@@ -12,6 +12,7 @@ import FilterButton from "../../molecules/filterButton/FilterButton";
 import StandartHeader from "../../molecules/standardHearder/StandardHeader";
 import { IoFilter } from "react-icons/io5";
 import Cookies from 'js-cookie';
+import { getAuthHeaders } from "@/app/utils/requestHeader";
 
 
 
@@ -26,15 +27,10 @@ export default function AlbumsList(){
     const [uploadModalOpen, setUploadModalOpen] = useState(false)
     const [albums, setAlbums] = useState<Album[]>([])
 
-    useEffect(()=>{
-        const jwtToken = Cookies.get('jwtToken');
-        let headers = {};
-
-        if (jwtToken) {
-            headers['Authorization'] = `Bearer ${jwtToken}`;
-        }
-      
-        fetch(`http://127.0.0.1:8000/albums/user`, {headers:headers})
+    useEffect(() => {
+        const headers = getAuthHeaders();
+        console.log("Token for /albums/user:", headers.Authorization);
+        fetch('http://127.0.0.1:8000/albums/user', { headers })
         .then((res) => {
             return res.json();
         })
@@ -45,34 +41,30 @@ export default function AlbumsList(){
         })
     }, [])
 
-    const handleNewAlbumSubmission = (event: any) =>{
+    const handleNewAlbumSubmission = (event: any) => {
         event.preventDefault()
-
+    
         const album = emptyNewAlbum;
         album.title = event.target.title.value
         album.description = event.target.description.value
         album.label = event.target.label.value
         album.isPublic = event.target.isPublic.checked
-        
-        const jwtToken = Cookies.get('jwtToken');
-        let headers = {
-            'Content-Type': 'application/json'
-        };
-        
-        if (jwtToken) {
-            headers['Authorization'] = `Bearer ${jwtToken}`;
-        }
-
+    
+        const token = `Bearer ${Cookies.get('jwtToken')}`;
+        console.log("Token for /albums:", token);
         fetch('http://127.0.0.1:8000/albums', {
             method:"POST", 
-            headers: {...headers},
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
             body: JSON.stringify(album)
         })
         .then((res) => {
             return res.json();
         })
         .then((data) => {
-           window.location.assign(`albums/${data.id}`)
+        window.location.assign(`albums/${data.id}`)
         }).catch((error)=>{
             console.log(error)
         })
