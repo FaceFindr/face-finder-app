@@ -14,11 +14,16 @@ export default function forgot(){
     const [showPassword, setShowPassword] = useState(false)
     const router = useRouter();
     const [token, setToken] = useState<string| string[] | undefined>("");
+    const [refreshToken, setRefreshToken] = useState<string| string[] | undefined>(""); // Add this line
 
     useEffect(() => {
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         setToken(hashParams.get('access_token') || "");
-    }, []);
+        const refreshTokenFromParams = hashParams.get('refresh_token') || "";
+        setRefreshToken(refreshTokenFromParams); 
+        console.log(token);
+        console.log(refreshToken);
+    }, [token, refreshToken]);
          
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -29,14 +34,16 @@ export default function forgot(){
             alert("Passwords don't match");
             return;
         }
+        const refreshTokenStr = Array.isArray(refreshToken) ? refreshToken.join('') : refreshToken || ''; 
         const response = await fetch('http://127.0.0.1:8000/auth/changePass', { //change password
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ password: newPassword })
-        });
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'Refresh-Token': refreshTokenStr
+        },
+        body: JSON.stringify({ password: newPassword })
+    });
     
         if (response.ok) {
             console.log('password changed successfully');            
@@ -50,6 +57,7 @@ export default function forgot(){
             }
         }
     }
+
     return (
         <div className={baseAuthStyle.pageContainer} >
 
