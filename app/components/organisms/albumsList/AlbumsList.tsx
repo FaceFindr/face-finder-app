@@ -11,6 +11,9 @@ import CreateAlbumForm from "../createAlbumForm/CreateAlbumForm";
 import FilterButton from "../../molecules/filterButton/FilterButton";
 import StandartHeader from "../../molecules/standardHearder/StandardHeader";
 import { IoFilter } from "react-icons/io5";
+import Cookies from 'js-cookie';
+
+
 
 
 const emptyNewAlbum: Album ={
@@ -24,7 +27,14 @@ export default function AlbumsList(){
     const [albums, setAlbums] = useState<Album[]>([])
 
     useEffect(()=>{
-        fetch(`http://127.0.0.1:8000/albums/user`)
+        const jwtToken = Cookies.get('jwtToken');
+        let headers = {};
+
+        if (jwtToken) {
+            headers['Authorization'] = `Bearer ${jwtToken}`;
+        }
+      
+        fetch(`http://127.0.0.1:8000/albums/user`, {headers:headers})
         .then((res) => {
             return res.json();
         })
@@ -44,11 +54,18 @@ export default function AlbumsList(){
         album.label = event.target.label.value
         album.isPublic = event.target.isPublic.checked
         
+        const jwtToken = Cookies.get('jwtToken');
+        let headers = {
+            'Content-Type': 'application/json'
+        };
+        
+        if (jwtToken) {
+            headers['Authorization'] = `Bearer ${jwtToken}`;
+        }
+
         fetch('http://127.0.0.1:8000/albums', {
             method:"POST", 
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: {...headers},
             body: JSON.stringify(album)
         })
         .then((res) => {
@@ -106,3 +123,4 @@ export default function AlbumsList(){
         </div>
     );
 }
+

@@ -4,13 +4,13 @@ import navBarStyle from './navBarStyle.module.css'
 
 export type NavBarProps = {
     isLogged?: boolean
+    noLinks?: boolean
 }
-export default function NavBar({isLogged}:NavBarProps){
-  
+export default function NavBar({isLogged, noLinks}:NavBarProps){
     return(
-        <div style={{position:"fixed"}}>
+        <div style={ !noLinks ? {position:"fixed"} : {}}>
             <div className={navBarStyle.auxBar}></div>
-            <div className={navBarStyle.navContainer}>
+            <div className={`${navBarStyle.navContainer} ${noLinks ? navBarStyle.noLinks : navBarStyle.hasLinks }`}>
                 <div onClick={()=>window.location.assign("/")} className={navBarStyle.logo}>
                     <Text 
                         text='Face' 
@@ -23,23 +23,25 @@ export default function NavBar({isLogged}:NavBarProps){
                         color='main-blue'
                     />
                 </div>
-
-                    <div className={navBarStyle.authLinks}>
-                        {isLogged ?
-                            <>
-                                <Text text='Login' link='/auth/logIn'/>
-                                <Text text='Sign Up' link='/auth/signUp'/> 
-                            </>
-                            :  
-                            <>
-                                <Text text='Home' link='/'/>
-                                <Text text='My albums' link='/albums'/> 
-                                <Text text='Settings' link='/settings'/> 
-                                <Text text='Logout' link='/auth/signUp'/> 
-                            </>
-                        }
-                       
-                    </div>
+                    {
+                        !noLinks &&
+                            <div className={navBarStyle.authLinks}>
+                                {!isLogged ?
+                                    <>
+                                        <Text text='Login' link='/auth/logIn'/>
+                                        <Text text='Sign Up' link='/auth/signUp'/> 
+                                    </>
+                                    :  
+                                    <>
+                                        <Text text='Home' link='/'/>
+                                        <Text text='My albums' link='/albums'/> 
+                                        <Text text='Settings' link='/settings'/> 
+                                        <Text text='Logout' link='/auth/signUp'/> 
+                                    </>
+                                }
+                            </div>
+                    }
+                    
                 
             </div>
 

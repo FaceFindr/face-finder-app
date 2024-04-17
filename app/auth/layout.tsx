@@ -1,6 +1,7 @@
 import layoutStyle from './layoutStyle.module.css'
 import logoB from '@/public/image/logoB.png'
 import logo from '@/public/image/logo.png'
+import NavBar from '../components/molecules/navBar/NavBar';
 
 
 export default function AuthLayout({children}:{children:React.ReactNode}){
@@ -9,10 +10,7 @@ export default function AuthLayout({children}:{children:React.ReactNode}){
             <div className={layoutStyle.imgContainer}></div>
 
             <div className={layoutStyle.contentContainer}>
-                <div className={layoutStyle.formHeader}>
-                    <img src={logoB.src} alt=""  className={layoutStyle.logoB}/>
-                </div>
-            
+                <NavBar noLinks/>
                 {children}  
             </div>
 

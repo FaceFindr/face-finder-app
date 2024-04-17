@@ -4,11 +4,18 @@
     border:0.5px solid var(--ligth-gray);
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0 80px;
     background-color: white;
     color: #be3434;
 }
+.hasLinks{
+    justify-content: space-between;
+}
+.noLinks{
+    width: 100%;
+    justify-content: center;
+}   
+
 .logo{
     cursor: pointer;
 }

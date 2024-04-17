@@ -40,7 +40,7 @@ export default function forgot(){
         <div className={baseAuthStyle.pageContainer} >
 
             <form className={baseAuthStyle.formContainer} method="post" onSubmit={handleSubmit}>
-            <Link href="logIn"><Text text="< Log In" type={TextTypes.CAPTION}/></Link> 
+                <Text text="< Log In" type={TextTypes.CAPTION} link="logIn"/>
                 <Text text="Forgot Password"  type={TextTypes.HEADER}/>
                 <Text text="You will be sent an email with more information "  type={TextTypes.TEXT}/>
 
@@ -52,7 +52,7 @@ export default function forgot(){
 
                 <div className={forgotStyle.createAccountDiv}>
                     <Text text="Don't have an account?" type={TextTypes.CAPTION} />
-                    <Link href="signUp"><Text text="Create an account" type={TextTypes.CAPTION}/></Link> 
+                    <Text text="Create an account" type={TextTypes.CAPTION} link="signUp"/>
                 </div>
 
             </form>
