@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 
 type ButtonProps={
-    text: string;
+    text?: string;
     onClick?: () => void;
     size?: ButtonSize;
     variant?: ButtonVariant;

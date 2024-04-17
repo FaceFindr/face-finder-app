@@ -21,7 +21,7 @@ export default function Modal({title, content, onClose}:ModalProps){
                 />
 
                 <div className={modalStyle.modalHeader}>
-                    <Text text={title} type={TextTypes.HEADER} />
+                    <Text text={title} type={TextTypes.HEADER} color='#08263b'/>
                 </div>
 
                 <div className={modalStyle.modalContent}>

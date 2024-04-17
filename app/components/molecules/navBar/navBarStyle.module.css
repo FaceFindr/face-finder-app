@@ -1,14 +1,13 @@
 .navContainer{
     height: 70px;
     width: 100vw;
-    border:1px solid var(--ligth-gray);
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border:0.5px solid var(--ligth-gray);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: white;
-    background-color: var(--main);
     padding: 0 80px;
+    background-color: white;
+    color: #be3434;
 }
 .logo{
     cursor: pointer;
@@ -16,11 +15,12 @@
 
 .authLinks{
     display: flex;
-    column-gap: 10px;
+    column-gap: 15px;
 }
 
-.authLink{
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
+
+.auxBar{
+    height: 20px;
+    width: 100vw;
+    background-color: #08263b;
 }

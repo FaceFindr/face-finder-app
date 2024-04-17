@@ -10,6 +10,14 @@ import { Album } from "@/src/constants/album";
 import Modal from "../../molecules/modal/Modal";
 import FileUpload from "../../molecules/fileUpload/fileUpload";
 import CreatePhotoModal from "../createPhotoModal/CreatePhotoModal";
+import { PersonCard } from "../../molecules/personCard/PersonCard";
+
+import dynamic from 'next/dynamic';
+import StandartHeader from "../../molecules/standardHearder/StandardHeader";
+
+const Layout = dynamic(() => import('react-masonry-list'), {
+  ssr: false,
+});
 
 export type AlbumListProps = {
     albumId: string
@@ -19,7 +27,7 @@ const emptyAlbum: Album ={
     title: "",
     isPublic: false,
 }
-export default function AlbumList({albumId}: AlbumListProps){
+export default function AlbumOrganism({albumId}: AlbumListProps){
     const [album, setAlbum] = useState<Album>()
     const [photos, setPhotos] = useState([])
     const [uploadModalOpen, setUploadModalOpen] = useState(false)
@@ -74,48 +82,50 @@ export default function AlbumList({albumId}: AlbumListProps){
 
     return (
         <div>
-            <div className={albumListStyle.headerContainer}>
-                <div className={albumListStyle.titleContainer}>
-                    <Text text={album?.title!} type={TextTypes.HEADER}/>
-                    
+            {/* Header */}
+            <StandartHeader 
+                title={album?.title!} 
+                mainButtonText="Upload"
+                mainButtonIcon={<IoSettingsOutline/>}
+                secondaryButtonIcon={<MdOutlineCloudUpload />}
+                onClickMainButton={()=>setUploadModalOpen(true)} 
+                onClickSecondaryButton={()=>{location.assign(`${albumId}/settings`)}}
+            />
+
+            <Divider />
+
+            {/* People */}
+            <div className={albumListStyle.peopleSection}>
+                <div className={albumListStyle.showAllCaption}>
+                    <Text 
+                        text={"Show all people"}
+                        type={TextTypes.CAPTION}
+                        link={`${album?.id}/people`}
+                    />
                 </div>
-                
-                <div className={albumListStyle.headerButtons}>
-                    <Button text="" 
-                        size={ButtonSize.SMALL}  
-                        variant={ButtonVariant.OUTLINED}
-                        icon={
-                            <IoSettingsOutline className={albumListStyle.iconFilter}/>
-                        }
-                        onClick={()=>{}}
-                    />
-                    <Button text="" 
-                        size={ButtonSize.SMALL}  
-                        variant={ButtonVariant.OUTLINED}
-                        icon={
-                            <IoFilter className={albumListStyle.iconFilter}/>
-                        }
-                        onClick={()=>{}}
-                    />
-                    <Button text="Upload" 
-                        size={ButtonSize.BIG} 
-                        icon={<MdOutlineCloudUpload />}
-                        onClick={()=>setUploadModalOpen(true)}
-                    />
+                <div className={albumListStyle.personCards}>
+                    {test.map(person =>{
+                        return (
+                            <PersonCard key={person}/>
+                        )
+                    })}   
                 </div>
             </div>
-            <Divider />
-            <div className={albumListStyle.photosContainer}>
-                {
+
+            {/* Photos */}
+            <Layout
+                gap={5}
+                items={
                     photos.map((photo:any, index)=>{
                         return (
-                            <div>
-                                <img key={index} className={albumListStyle.photo} src={photo.image_key}/>
+                            <div key={index}>
+                                <img  className={albumListStyle.photo} src={photo.image_key}/>
                             </div>  
                         )
                     })
                 }
-            </div>
+            />
+
             {uploadModalOpen &&
                <CreatePhotoModal onClose={()=> setUploadModalOpen(false)}  onSubmit={handlePhotoAddition}/>
             }

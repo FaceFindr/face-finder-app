@@ -29,13 +29,13 @@
 /* variants */
 .btnContained{
     border:0;
-    background-color: var(--main);
+    background-color: #08263b;
     color: white;
 }
 .btnOutlined{
-    border:1.5px solid var(--main);
+    border:1.5px solid #08263b;
     background-color: white;
-    color: var(--main);
+    color: #08263b;
 }
 .btnSave{
     border:0;

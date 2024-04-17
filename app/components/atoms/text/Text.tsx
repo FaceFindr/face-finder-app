@@ -2,7 +2,10 @@ import textStyle from './textStyle.module.css'
 
 export type TextProps = {
     text:string;
-    type?: TextTypes
+    type?: TextTypes;
+    color?: string;
+    fontSize?:string;
+    link?: string
 }
 
 export enum TextTypes{
@@ -11,7 +14,7 @@ export enum TextTypes{
     CAPTION
 }
 
-export default function Text({text, type}:TextProps){
+export default function Text({text, type, color, fontSize, link}:TextProps){
     const getTypeClass=()=>{
         switch (type) {
             case TextTypes.HEADER:
@@ -28,10 +31,29 @@ export default function Text({text, type}:TextProps){
 
         return `${typeClass}`
     }
-
+    const getColor = (color:string) =>{
+        switch (color) {
+            case 'main-red':
+                return "#be3434"
+            case 'main-blue':
+                return "#08263b"
+        
+            default:
+              return color
+        }
+    }
     return (
-        <span className={textClasses()}>
-            {text}
+        <span 
+            className={textClasses()} 
+            style={{
+                color: getColor(color?? ""),
+                fontSize: fontSize
+            }}
+        >
+            {
+                link ? <a className={textStyle.linkStyle} href={link}>{text}</a> : text
+            }
+
         </span>
     );
 }

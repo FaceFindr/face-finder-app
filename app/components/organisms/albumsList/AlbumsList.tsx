@@ -1,14 +1,17 @@
 'use client'
 import { ALBUM_VISIBILITY, Album } from "@/src/constants/album";
 import Text, { TextTypes } from "../../atoms/text/Text";
-import Button, { ButtonSize, ButtonVariant } from "../../atoms/button/Button";
+import Button, { ButtonSize } from "../../atoms/button/Button";
 import Divider from "../../atoms/divider/Divider";
 import AlbumCard from "../../molecules/albumCard/AlbumCard";
-import { IoFilter } from "react-icons/io5";
 import albumsListStyle from "./albumsListStyle.module.css"
 import { useEffect, useState } from "react";
 import Modal from "../../molecules/modal/Modal";
 import CreateAlbumForm from "../createAlbumForm/CreateAlbumForm";
+import FilterButton from "../../molecules/filterButton/FilterButton";
+import StandartHeader from "../../molecules/standardHearder/StandardHeader";
+import { IoFilter } from "react-icons/io5";
+
 
 const emptyNewAlbum: Album ={
     title: "",
@@ -60,36 +63,33 @@ export default function AlbumsList(){
 
     return (
         <div>
-            <div className={albumsListStyle.pageHeader}>
-                <Text text="My Albums" type={TextTypes.HEADER}/>
-                
-                <div className={albumsListStyle.pageHeaderButtons} >
-                    <Button text="" 
-                        size={ButtonSize.SMALL}  
-                        variant={ButtonVariant.OUTLINED}
-                        icon={
-                            <IoFilter className={albumsListStyle.iconFilter} />
-                        }
-                    />
-                    <Button text="New Album" 
-                        size={ButtonSize.BIG} 
-                        onClick={()=>setUploadModalOpen(true)}
-                    />
-                </div>
+            {/* Hearder */}
+            <StandartHeader 
+                title="My Albums"
+                mainButtonText="New Album" 
+                secondaryButtonIcon={<IoFilter/>}
+                onClickMainButton={()=>setUploadModalOpen(true)} 
+                onClickSecondaryButton={()=>{}}
+            />
 
-            </div>
             <Divider />
+            
+            {/* Albums */}
             <div className={albumsListStyle.albumsContainer}>
                 {albums.map(album =>{
-                    return <AlbumCard 
+                    return (
+                        <AlbumCard 
                             key={album.id}
                             id={album.id!}
-                            date={album.creationDate ?? ""} 
-                            label={album.label ?? ""}
-                            visibility={album.isPublic ? ALBUM_VISIBILITY.PUBLIC : ALBUM_VISIBILITY.PRIVATE}
+                            showLabel
+                            title={album.title}
+                            label={album.label}
                         />
+                    )
                 })}
             </div>
+
+            {/* Modal */}
             {uploadModalOpen &&
                 <Modal 
                     title="New Album" 
@@ -103,8 +103,6 @@ export default function AlbumsList(){
                     onClose={()=>setUploadModalOpen(false)}
                 />
             }
-            
-           
         </div>
     );
 }

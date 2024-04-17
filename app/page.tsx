@@ -7,10 +7,10 @@ export default function HomePage(){
       <div>
         
         <div>
-          <NavBar isHomePage/>
+          <NavBar isLogged={false}/>
         </div>
 
-        <div style={{padding:"100px 80px 100px 80px"}}>
+        <div style={{padding:"150px 70px 100px 70px"}}>
           <PublicAlbumsList />
         </div> 
 

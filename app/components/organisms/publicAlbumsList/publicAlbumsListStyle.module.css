@@ -1,23 +1,14 @@
-.pageHeader{
+.publicAlbumContainer {
     display: flex;
-    justify-content: space-between;
-}
-.pageHeaderButtons{
-    display: flex;
+    flex-direction: column;
     align-items: center;
-    column-gap: 10px;
-
+    row-gap: 20px;
 }
-.buttonIcon{
-    width: 1rem;
-    height: 1rem;
 
-}
-.albumsContainer{
+.cards{
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     margin-top: 20px;
-    column-gap: 35px;
-    row-gap: 20px;
- 
+    gap: 20px;
 }

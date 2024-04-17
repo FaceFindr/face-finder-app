@@ -20,7 +20,7 @@
     padding-right: 8px;
 }
 .inputContainer:has(input:focus){
-    border:1px solid var(--main);
+    border:1px solid #08263b;
 }
 
 

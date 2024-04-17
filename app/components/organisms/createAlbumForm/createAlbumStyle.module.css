@@ -14,8 +14,8 @@
     cursor: pointer;
 }
 .checkbox:checked{
-    background-color: #6CA468;
-    color: #6CA468;
+    accent-color: var(--main-blue)
+
 }
 
 .formFooter{

@@ -1,33 +1,33 @@
-import Text from '../../atoms/text/Text';
+import Text, { TextTypes } from '../../atoms/text/Text';
 import { FaRegCalendar } from "react-icons/fa";
 import { FaTag } from "react-icons/fa6";
 import albumCardStyle from './albumCardStyle.module.css';
 import { ALBUM_VISIBILITY } from '@/src/constants/album';
 
-export type AlbumThumb = {
+export type AlbumCardProps = {
     id:string
-    date: string
-    label:string
-    visibility:ALBUM_VISIBILITY
+    title: string
+    showLabel: boolean
+    ownerName?:string
+    label?:string
 }
-export default function AlbumCard({id, date, label, visibility}: AlbumThumb){
+export default function AlbumCard({id, showLabel, title, ownerName, label}: AlbumCardProps){
     return (
-        <div className={albumCardStyle.cardContainer}>
-            <div className={albumCardStyle.albumThumb} onClick={()=>window.location.assign(`/albums/${id}`)}>
+        <div className={albumCardStyle.cardContainer} onClick={() => window.location.assign(`albums/${id}`)}>
+            <div className={albumCardStyle.albumThumb}>
             </div>
-            
+
             <div className={albumCardStyle.albumDescription}>
-                <div className={albumCardStyle.albumDescriptionCell}>
-                    <FaRegCalendar/>
-                    <Text text={date}/>
-                </div>
-                <div className={albumCardStyle.albumDescriptionCell}>
-                    <FaTag/>
-                    <Text text={label}/>
-                </div>
-                <div className={albumCardStyle.albumDescriptionCell}>
-                    <Text text={visibility}/>
-                </div>
+                <Text 
+                    text={title} 
+                    color="main-blue" 
+                    fontSize='20px'
+                />
+                <Text 
+                    text={!showLabel ? `By ${ownerName}` : label ?? "" } 
+                    color="main-blue" 
+                    type={TextTypes.CAPTION} 
+                />
             </div>
         </div>
     );

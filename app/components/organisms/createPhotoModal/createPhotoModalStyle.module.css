@@ -1,6 +1,11 @@
 .photoModalContainer{
+    height: 50vh;
+    width: 100%;
+}
+.list{
     width: 100%;
     height: 40vh;
+    overflow: scroll;
 }
 .dropZone{
     height: 80%;
@@ -20,6 +25,7 @@
     justify-content: space-between;
     align-items: center;
 }
+
 .footerButtons{
     display: flex;
     margin-top: 30px;

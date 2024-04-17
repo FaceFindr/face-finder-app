@@ -26,27 +26,28 @@ export default function CreatePhotoModal({onClose, onSubmit}: CreatePhotoModalPr
             content=
             {
                 <div className={createPhotoModalStyle.photoModalContainer}>
-                    {
-                        !uploadedFiles.length ? 
-                            <div className={createPhotoModalStyle.dropZone}>
-                                <FileUpload onUpload={(files)=>setUploadedFiles(files)}/>
-                            </div>
-                        : 
-                            <div className={createPhotoModalStyle.fileList} >
-                                {uploadedFiles.map((file: File) =>{
-                                    return(
-                                        <div className={createPhotoModalStyle.listedFile} key={file.name}>
-                                            <Text text={file.name}/>
-                                            <IoIosClose 
-                                                style={{width:'20px', height:'20px', cursor:'pointer'}} 
-                                                onClick={() => removeFile(file.name)}
-                                            />
-                                        </div>
-                                    )  
-                                })}
-                            </div>
-                    }
-
+                    <div className={createPhotoModalStyle.list}>
+                        {
+                            !uploadedFiles.length ? 
+                                <div className={createPhotoModalStyle.dropZone}>
+                                    <FileUpload onUpload={(files)=>setUploadedFiles(files)}/>
+                                </div>
+                            : 
+                                <div className={createPhotoModalStyle.fileList} >
+                                    {uploadedFiles.map((file: File) =>{
+                                        return(
+                                            <div className={createPhotoModalStyle.listedFile} key={file.name}>
+                                                <Text text={file.name}/>
+                                                <IoIosClose 
+                                                    style={{width:'20px', height:'20px', cursor:'pointer'}} 
+                                                    onClick={() => removeFile(file.name)}
+                                                />
+                                            </div>
+                                        )  
+                                    })}
+                                </div>
+                        }
+                    </div>
                     <div className={createPhotoModalStyle.footerButtons}>
                         <Button 
                             text='Cancel' 

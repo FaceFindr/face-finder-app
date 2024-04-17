@@ -6,7 +6,7 @@ export default function AlbumsLayout({children}:{children:React.ReactNode}){
             <div>
                 <NavBar/>
             </div>
-            <div style={{padding:"100px 80px 100px 80px"}}>
+            <div style={{padding:"150px 70px 100px 70px"}}>
                 {children}
             </div> 
         </div>

@@ -13,4 +13,5 @@ export type Album = {
     thumb?: string
     label?: string
     creationDate?: string
+    ownerName?:string
 }
