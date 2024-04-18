@@ -31,8 +31,9 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     const [album, setAlbum] = useState<Album>()
     const [photos, setPhotos] = useState([])
     const [uploadModalOpen, setUploadModalOpen] = useState(false)
+    const [persons, setPersons] = useState([]);
 
-    useEffect(()=>{
+    useEffect(() => {
         const headers = getAuthHeaders();
         fetch(`http://127.0.0.1:8000/albums/${albumId}`, { headers })
         .then((res) => {
@@ -43,8 +44,19 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         }).catch((error)=>{
             console.log(error)
         })
-       loadPhotos();
-    },[])
+    
+        fetch(`http://127.0.0.1:8000/person/${albumId}`, { headers })
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+            setPersons(data);
+        }).catch((error)=>{
+            console.log(error)
+        })
+    
+        loadPhotos();
+    }, []);
 
     const handlePhotoAddition = (files:File[])=>{
         const formData = new FormData();
@@ -108,11 +120,15 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                     />
                 </div>
                 <div className={albumListStyle.personCards}>
-                    {test.map(person =>{
+                    {persons.map((person:any, index) => {
                         return (
-                            <PersonCard key={person}/>
+                            <PersonCard 
+                                key={index} 
+                                person={person.label} 
+                                thumbnail={person.thumbnail_key}
+                            />
                         )
-                    })}   
+                    })}
                 </div>
             </div>
 
