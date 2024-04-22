@@ -12,14 +12,10 @@ import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import {createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-console.log(SUPABASE_URL)
-if (!SUPABASE_URL || !SUPABASE_KEY) {
-  throw new Error('Missing Supabase environment variables');
-}
+const SB_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const SB_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY ?? "";
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = createClient(SB_URL, SB_KEY);
 
 export default function LogIn(){
 
