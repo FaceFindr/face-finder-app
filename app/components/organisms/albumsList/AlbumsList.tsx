@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import Modal from "../../molecules/modal/Modal";
 import CreateAlbumForm from "../createAlbumForm/CreateAlbumForm";
 import FilterButton from "../../molecules/filterButton/FilterButton";
-import StandartHeader from "../../molecules/standardHearder/StandardHeader";
+import StandardHeader from "../../molecules/standardHearder/StandardHeader";
 import { IoFilter } from "react-icons/io5";
 import Cookies from 'js-cookie';
 import { getAuthHeaders } from "@/app/utils/requestHeader";
@@ -73,7 +73,7 @@ export default function AlbumsList(){
     return (
         <div>
             {/* Hearder */}
-            <StandartHeader 
+            <StandardHeader 
                 title="My Albums"
                 mainButtonText="New Album" 
                 secondaryButtonIcon={<IoFilter/>}

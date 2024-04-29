@@ -1,5 +1,5 @@
 'use client'
-import Button, { ButtonSize, ButtonVariant } from "@/app/components/atoms/button/Button";
+
 import Text, { TextTypes } from "@/app/components/atoms/text/Text";
 import { IoFilter, IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineCloudUpload } from "react-icons/md";
@@ -7,13 +7,14 @@ import albumListStyle from './albumListStyle.module.css'
 import Divider from "@/app/components/atoms/divider/Divider";
 import { useEffect, useState } from "react";
 import { Album } from "@/src/constants/album";
-import Modal from "../../molecules/modal/Modal";
-import FileUpload from "../../molecules/fileUpload/fileUpload";
 import CreatePhotoModal from "../createPhotoModal/CreatePhotoModal";
 import { PersonCard } from "../../molecules/personCard/PersonCard";
 import { getAuthHeaders } from "@/app/utils/requestHeader";
 import dynamic from 'next/dynamic';
-import StandartHeader from "../../molecules/standardHearder/StandardHeader";
+import StandardHeader from "../../molecules/standardHearder/StandardHeader";
+import Button, { ButtonSize, ButtonVariant } from "../../atoms/button/Button";
+import Modal from "../../molecules/modal/Modal";
+import AlbumSettings from "../albumSettings/AlbumSettings";
 
 const Layout = dynamic(() => import('react-masonry-list'), {
   ssr: false,
@@ -23,15 +24,14 @@ export type AlbumListProps = {
     albumId: string
 }
 
-const emptyAlbum: Album ={
-    title: "",
-    isPublic: false,
-}
 export default function AlbumOrganism({albumId}: AlbumListProps){
     const [album, setAlbum] = useState<Album>()
     const [photos, setPhotos] = useState([])
     const [uploadModalOpen, setUploadModalOpen] = useState(false)
+    const [searchModalOpen, setSearchModalOpen] = useState(false)
     const [persons, setPersons] = useState([]);
+    const [searchResult, setSearchResult] = useState([]);
+    const [albumSettingsModal, setAlbumSettingsModal] = useState(false)
 
     useEffect(() => {
         const headers = getAuthHeaders();
@@ -94,60 +94,129 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         })
     }
 
-    const test = [1, 2, 3, 4, 5, 6, 8, 9, 10]
+    const handleSearch = (files:File[]) => {
+        const headers = getAuthHeaders();
+        const formData = new FormData();
+
+        formData.append("file", files[0]);
+
+        fetch(`http://127.0.0.1:8000/photo/search/${albumId}`, {
+            method:"POST", 
+            body:formData,
+            headers
+        })
+        .then((res) => res.json())
+        .then(res => {
+            setSearchResult(res)
+            setSearchModalOpen(false)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+    }
+
 
     return (
         <div>
             {/* Header */}
-            <StandartHeader 
+            <StandardHeader 
                 title={album?.title!} 
                 mainButtonText="Upload"
                 mainButtonIcon={<IoSettingsOutline/>}
+                arrowBack={searchResult.length>0}
+                onClickArrowButton={()=>setSearchResult([])}
+                hasRigthButtons={searchResult.length==0}
                 secondaryButtonIcon={<MdOutlineCloudUpload />}
+                additionalButton={
+                    <Button 
+                        text={"Seach"}
+                        size={ButtonSize.BIG}
+                        variant={ButtonVariant.OUTLINED}
+                        onClick={()=>setSearchModalOpen(true)}
+                    />
+                }
                 onClickMainButton={()=>setUploadModalOpen(true)} 
-                onClickSecondaryButton={()=>{location.assign(`${albumId}/settings`)}}
+                onClickSecondaryButton={()=>setAlbumSettingsModal(true)}
             />
 
             <Divider />
+            {
+                !(searchResult.length > 0) ?
+                <div>
+                    {/* People */}
+                    <div className={albumListStyle.peopleSection}>
+                        {
+                            persons.length > 7 &&
+                            <div className={albumListStyle.showAllCaption}>
+                                <Text 
+                                    text={"Show all people"}
+                                    type={TextTypes.CAPTION}
+                                    link={`${album?.id}/people`}
+                                />
+                            </div>
+                        }
+                       
+                        <div className={albumListStyle.personCards}>
+                            {persons.map((person:any, index) => {
+                                return (
+                                    <PersonCard 
+                                        key={index} 
+                                        person={person.isNamed ? person.label : "Unamed"} 
+                                        onClick={()=>location.assign(`/albums/${albumId}/person/${person.label}`)}
+                                        thumbnail={person.thumbnail_key}
+                                    />
+                                )
+                            })}
+                        </div>
+                    </div>
 
-            {/* People */}
-            <div className={albumListStyle.peopleSection}>
-                <div className={albumListStyle.showAllCaption}>
-                    <Text 
-                        text={"Show all people"}
-                        type={TextTypes.CAPTION}
-                        link={`${album?.id}/people`}
+                    {/* Photos */}
+                    <Layout
+                        gap={5}
+                        items={
+                            photos.map((photo:any, index)=>{
+                                return (
+                                    <div key={index}>
+                                        <img  className={albumListStyle.photo} src={photo.image_key}/>
+                                    </div>  
+                                )
+                            })
+                        }
                     />
                 </div>
-                <div className={albumListStyle.personCards}>
-                    {persons.map((person:any, index) => {
-                        return (
-                            <PersonCard 
-                                key={index} 
-                                person={person.label} 
-                                thumbnail={person.thumbnail_key}
-                            />
-                        )
-                    })}
+                :
+                <div>
+                    <Layout
+                        gap={5}
+                        items={
+                            searchResult.map((photo:any, index)=>{
+                                return (
+                                    <div key={index}>
+                                        <img  className={albumListStyle.photo} src={photo.image_key}/>
+                                    </div>  
+                                )
+                            })
+                        }
+                    />
                 </div>
-            </div>
+            }
 
-            {/* Photos */}
-            <Layout
-                gap={5}
-                items={
-                    photos.map((photo:any, index)=>{
-                        return (
-                            <div key={index}>
-                                <img  className={albumListStyle.photo} src={photo.image_key}/>
-                            </div>  
-                        )
-                    })
-                }
-            />
 
             {uploadModalOpen &&
-               <CreatePhotoModal onClose={()=> setUploadModalOpen(false)}  onSubmit={handlePhotoAddition}/>
+               <CreatePhotoModal 
+                    title="Add Photos"
+                    confirmButtonText="Save"
+                    onClose={()=> setUploadModalOpen(false)}  
+                    onSubmit={handlePhotoAddition}
+                />
+            }
+            {searchModalOpen &&
+               <CreatePhotoModal
+                    title="Search Face"
+                    description="Insert a photo with that one face you are looking for"
+                    confirmButtonText="Search"
+                    onClose={()=> setSearchModalOpen(false)} 
+                    onSubmit={handleSearch}/>
             }
         </div>
     );

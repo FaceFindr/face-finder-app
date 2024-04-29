@@ -7,6 +7,7 @@ export type NavBarProps = {
     noLinks?: boolean
 }
 export default function NavBar({isLogged, noLinks}:NavBarProps){
+    console.log(isLogged)
     return(
         <div style={ !noLinks ? {position:"fixed"} : {}}>
             <div className={navBarStyle.auxBar}></div>
@@ -36,7 +37,9 @@ export default function NavBar({isLogged, noLinks}:NavBarProps){
                                         <Text text='Home' link='/'/>
                                         <Text text='My albums' link='/albums'/> 
                                         <Text text='Settings' link='/settings'/> 
-                                        <Text text='Logout' link='/auth/signUp'/> 
+
+                                        {/* TODO: IMPLEMENT LOGOUT */}
+                                        <Text text='Logout' link='/auth/logIn'/>
                                     </>
                                 }
                             </div>

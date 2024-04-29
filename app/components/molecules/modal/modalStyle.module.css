@@ -28,6 +28,8 @@
 
 .modalHeader{
     margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
 }
 
 .closeModal{

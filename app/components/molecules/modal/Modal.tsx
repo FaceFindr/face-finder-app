@@ -6,11 +6,12 @@ import { IoIosClose } from 'react-icons/io';
 
 export type ModalProps = {
     title:string
+    description?: string
     content: ReactNode
     onClose:()=>void
 }
 
-export default function Modal({title, content, onClose}:ModalProps){
+export default function Modal({title, description, content, onClose}:ModalProps){
     return(
         <div className={modalStyle.modalPannel} >
             <div className={modalStyle.modalContainer}>
@@ -22,6 +23,7 @@ export default function Modal({title, content, onClose}:ModalProps){
 
                 <div className={modalStyle.modalHeader}>
                     <Text text={title} type={TextTypes.HEADER} color='#08263b'/>
+                    <Text text={description??""}/>
                 </div>
 
                 <div className={modalStyle.modalContent}>

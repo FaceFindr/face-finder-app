@@ -8,10 +8,13 @@ import { IoIosClose } from "react-icons/io";
 import Modal from "../../molecules/modal/Modal";
 
 export type CreatePhotoModalProps = {
+    title: string
+    description?: string
+    confirmButtonText: string
     onClose:()=>void,
     onSubmit:(files:File[])=>void
 }
-export default function CreatePhotoModal({onClose, onSubmit}: CreatePhotoModalProps){
+export default function CreatePhotoModal({title, description, confirmButtonText, onClose, onSubmit}: CreatePhotoModalProps){
     const [uploadedFiles, setUploadedFiles] = useState([]);
 
 
@@ -21,8 +24,9 @@ export default function CreatePhotoModal({onClose, onSubmit}: CreatePhotoModalPr
 
     return (
         <Modal 
-            title="Add Photos" 
+            title={title}
             onClose={onClose}
+            description={description}
             content=
             {
                 <div className={createPhotoModalStyle.photoModalContainer}>
@@ -55,7 +59,7 @@ export default function CreatePhotoModal({onClose, onSubmit}: CreatePhotoModalPr
                             onClick={onClose}
                         />
                         <Button 
-                            text='Save' 
+                            text={confirmButtonText} 
                             variant={ButtonVariant.SAVE} 
                             size={ButtonSize.MEDIUM}
                             type="submit"

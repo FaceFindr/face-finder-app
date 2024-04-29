@@ -3,21 +3,26 @@ import personCardStyle from './personCardStyle.module.css'
 
 interface PersonCardProps {
     person: string;
+    onClick:()=>void
     thumbnail: string;
 }
 
-export function PersonCard({ person, thumbnail }: PersonCardProps){
+export function PersonCard({ person, onClick, thumbnail }: PersonCardProps){
     return (
-        <div className={personCardStyle.card}>
-            <div className={personCardStyle.personThumb} style={{ backgroundImage: `url(${thumbnail})`, backgroundRepeat: 'no-repeat', display : 'flex', backgroundSize: 'cover' }}>
-            </div>
-            <div className={personCardStyle.personName}>
-                <Text 
-                    text={person} 
-                    color="#08263b" 
-                    fontSize='18px'
-                />
-            </div>
+        <div 
+            className={personCardStyle.card}
+            onClick={onClick}
+        >
+                <div >
+                    <img src={thumbnail} alt="" className={personCardStyle.personThumb}/>
+                </div>
+                <div className={personCardStyle.personName}>
+                    <Text 
+                        text={person} 
+                        color="#08263b" 
+                        fontSize='18px'
+                    />
+                </div>
         </div>
     )
 }
