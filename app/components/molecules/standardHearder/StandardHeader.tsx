@@ -52,7 +52,6 @@ export default function StandardHeader({
                     />
                 </div>
             </div>
-
                 {
                     hasRigthButtons && 
                     <div className={standardHeaderSyle.headerButtons}>
@@ -71,6 +70,7 @@ export default function StandardHeader({
                         {additionalButton}
                     </div>
                 }
+                
                
         </div>
     )

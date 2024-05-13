@@ -14,7 +14,8 @@ import dynamic from 'next/dynamic';
 import StandardHeader from "../../molecules/standardHearder/StandardHeader";
 import Button, { ButtonSize, ButtonVariant } from "../../atoms/button/Button";
 import Modal from "../../molecules/modal/Modal";
-import AlbumSettings from "../albumSettings/AlbumSettings";
+import { usePathname } from "next/navigation";
+
 
 const Layout = dynamic(() => import('react-masonry-list'), {
   ssr: false,
@@ -31,8 +32,8 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     const [searchModalOpen, setSearchModalOpen] = useState(false)
     const [persons, setPersons] = useState([]);
     const [searchResult, setSearchResult] = useState([]);
-    const [albumSettingsModal, setAlbumSettingsModal] = useState(false)
-
+    const pathName = usePathname()
+    
     useEffect(() => {
         const headers = getAuthHeaders();
         fetch(`http://127.0.0.1:8000/albums/${albumId}`, { headers })
@@ -72,7 +73,6 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
             headers
         })
         .then((res) => {
-            console.log(res.json())
             setUploadModalOpen(false)
             loadPhotos()
             return res.json();
@@ -136,7 +136,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                     />
                 }
                 onClickMainButton={()=>setUploadModalOpen(true)} 
-                onClickSecondaryButton={()=>setAlbumSettingsModal(true)}
+                onClickSecondaryButton={()=> location.assign(`${pathName}/settings`) }
             />
 
             <Divider />
@@ -161,7 +161,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                                 return (
                                     <PersonCard 
                                         key={index} 
-                                        person={person.isNamed ? person.label : "Unamed"} 
+                                        person={person.is_named ? person.label : "Unamed"} 
                                         onClick={()=>location.assign(`/albums/${albumId}/person/${person.label}`)}
                                         thumbnail={person.thumbnail_key}
                                     />

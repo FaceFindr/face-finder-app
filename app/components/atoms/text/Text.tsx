@@ -11,7 +11,8 @@ export type TextProps = {
 export enum TextTypes{
     HEADER,
     TEXT, 
-    CAPTION
+    CAPTION, 
+    SUBHEADER,
 }
 
 export default function Text({text, type, color, fontSize, link}:TextProps){
@@ -19,6 +20,8 @@ export default function Text({text, type, color, fontSize, link}:TextProps){
         switch (type) {
             case TextTypes.HEADER:
                 return textStyle.header;
+            case TextTypes.SUBHEADER:
+                return textStyle.subHeader
             case TextTypes.CAPTION:
                 return textStyle.caption;
             default:

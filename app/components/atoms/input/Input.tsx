@@ -11,6 +11,7 @@ export type InputProps={
     width?:string;
     icon?:ReactNode;
     required?:boolean;
+    onChange?: (params:any) => void;
 }
 
 export default function Input(
@@ -21,7 +22,9 @@ export default function Input(
     type="text", 
     width, 
     icon, 
-    required}:InputProps){
+    required, 
+    onChange,
+}:InputProps){
 
     const inputClasses = ()=>{
         return `${inputStyle.baseInput}`
@@ -39,6 +42,7 @@ export default function Input(
                 placeholder={placeholder}
                 type={type}
                 required={required}
+                onChange={onChange ? onChange: undefined}
             />
             {icon}
         </div>

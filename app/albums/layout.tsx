@@ -7,7 +7,7 @@ export default function AlbumsLayout({children}:{children:React.ReactNode}){
     return (
         <div>
             <div>
-                <NavBar isLogged={jwtToken ? true: false}/>
+                <NavBar isLogged={true}/>
             </div>
             <div style={{padding:"150px 70px 100px 70px"}}>
                 {children}

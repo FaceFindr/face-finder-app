@@ -76,7 +76,7 @@ export default function SignUp(){
                     </div>
                     <div style={{marginTop:"10px"}}>
                         <Text text="Already have an account?" type={TextTypes.CAPTION} />
-                        <Link href="logIn"><Text text=" Log in" type={TextTypes.CAPTION}/></Link> 
+                        <Link href="logIn"><Text text="Log in" type={TextTypes.CAPTION}/></Link> 
                     </div>
                 </div>
 
