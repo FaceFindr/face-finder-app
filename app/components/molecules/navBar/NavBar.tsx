@@ -1,13 +1,18 @@
 "use client"
 import Text, { TextTypes } from '../../atoms/text/Text'
 import navBarStyle from './navBarStyle.module.css'
-
+import { getAuthHeaders } from '../../../utils/requestHeader'
+import cookies from 'js-cookie'
 export type NavBarProps = {
     isLogged?: boolean
     noLinks?: boolean
 }
 export default function NavBar({isLogged, noLinks}:NavBarProps){
-    console.log(isLogged)
+    const handleLogout = ()=>{
+        cookies.remove('jwtToken');
+        location.replace('auth/logIn')
+        
+    }
     return(
         <div style={ !noLinks ? {position:"fixed"} : {}}>
             <div className={navBarStyle.auxBar}></div>
@@ -39,7 +44,9 @@ export default function NavBar({isLogged, noLinks}:NavBarProps){
                                         <Text text='Settings' link='/settings'/> 
 
                                         {/* TODO: IMPLEMENT LOGOUT */}
-                                        <Text text='Logout' link='/auth/logIn'/>
+                                        <div onClick={handleLogout}>
+                                            <Text text='Logout'/>
+                                        </div>
                                     </>
                                 }
                             </div>
