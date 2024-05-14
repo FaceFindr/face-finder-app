@@ -6,11 +6,31 @@ import { MdEdit } from "react-icons/md";
 import Button from "@/app/components/atoms/button/Button";
 import { IoMdArrowBack } from "react-icons/io";
 import Modal from "@/app/components/molecules/modal/Modal";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import MultiEmailInput from "@/app/components/molecules/multiEmail/MultiEmailInput";
+import { getAuthHeaders } from "@/app/utils/requestHeader";
+import { usePathname } from "next/navigation";
 
 export default function AlbumSettingsPage() {
+    const pathName = usePathname()
     const [modalOpen, setModalOpen] = useState(false)
+    const [colaborators, setColaborators] = useState([])
+    useEffect(()=>{
+        const headers = getAuthHeaders();
+          
+        fetch(`http:///127.0.0.1:8000/albums/${pathName.split("/")[2]}/permissions`, { headers })
+
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+            setColaborators(data);
+        }).catch((error)=>{
+            console.log(error)
+        })
+
+    },[]
+    )
     return(
        <div className={settingsStyle.pageContainer}>
             <IoMdArrowBack
