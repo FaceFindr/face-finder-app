@@ -6,9 +6,10 @@ import { ImFolderUpload } from 'react-icons/im';
 
 
 export type FileUploadProps ={
+    singleFile?: boolean
     onUpload:(acceptedFiles:any)=>void;
 }
-export default function FileUpload({onUpload}: FileUploadProps){
+export default function FileUpload({onUpload, singleFile}: FileUploadProps){
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
             'image/*': ['.jpeg', '.png']
@@ -16,6 +17,7 @@ export default function FileUpload({onUpload}: FileUploadProps){
         onDrop: (acceptedFiles) => {
             onUpload(acceptedFiles);
         },
+        multiple: singleFile != undefined ? !singleFile : undefined
     });
 
     const otherAtt = { directory: "", webkitdirectory: "" };

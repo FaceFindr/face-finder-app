@@ -205,6 +205,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
             {uploadModalOpen &&
                <CreatePhotoModal 
                     title="Add Photos"
+                    search={false}
                     confirmButtonText="Save"
                     onClose={()=> setUploadModalOpen(false)}  
                     onSubmit={handlePhotoAddition}
@@ -213,6 +214,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
             {searchModalOpen &&
                <CreatePhotoModal
                     title="Search Face"
+                    search={true}
                     description="Insert a photo with that one face you are looking for"
                     confirmButtonText="Search"
                     onClose={()=> setSearchModalOpen(false)} 

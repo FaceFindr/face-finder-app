@@ -11,10 +11,11 @@ export type CreatePhotoModalProps = {
     title: string
     description?: string
     confirmButtonText: string
+    search?:boolean,
     onClose:()=>void,
     onSubmit:(files:File[])=>void
 }
-export default function CreatePhotoModal({title, description, confirmButtonText, onClose, onSubmit}: CreatePhotoModalProps){
+export default function CreatePhotoModal({title, description, search, confirmButtonText, onClose, onSubmit}: CreatePhotoModalProps){
     const [uploadedFiles, setUploadedFiles] = useState([]);
 
 
@@ -34,20 +35,32 @@ export default function CreatePhotoModal({title, description, confirmButtonText,
                         {
                             !uploadedFiles.length ? 
                                 <div className={createPhotoModalStyle.dropZone}>
-                                    <FileUpload onUpload={(files)=>setUploadedFiles(files)}/>
+                                    <FileUpload singleFile={search??undefined} onUpload={(files)=>setUploadedFiles(files)}/>
                                 </div>
                             : 
                                 <div className={createPhotoModalStyle.fileList} >
-                                    {uploadedFiles.map((file: File) =>{
-                                        return(
-                                            <div className={createPhotoModalStyle.listedFile} key={file.name}>
-                                                <Text text={file.name}/>
-                                                <IoIosClose 
-                                                    style={{width:'20px', height:'20px', cursor:'pointer'}} 
-                                                    onClick={() => removeFile(file.name)}
-                                                />
-                                            </div>
-                                        )  
+                                    {uploadedFiles.map((file: File) => {
+                                        return search ?
+                                                <div
+                                                style={{
+                                                    backgroundImage: `url(${URL.createObjectURL(file)})`,
+                                                    width: "100%",
+                                                    height: "100%", 
+                                                    backgroundPosition: "center", 
+                                                    backgroundSize: 'contain',
+                                                    backgroundRepeat: 'no-repeat'
+                                                }}
+                                                >
+                                               
+                                                </div>
+                                                : <div className={createPhotoModalStyle.listedFile} key={file.name}>
+                                                    <Text text={file.name}/>
+                                                    <IoIosClose 
+                                                        style={{width:'20px', height:'20px', cursor:'pointer'}} 
+                                                        onClick={() => removeFile(file.name)}
+                                                    />
+                                                </div>
+                                            
                                     })}
                                 </div>
                         }

@@ -3,20 +3,18 @@ import Text from "../../atoms/text/Text";
 import multiEmailStyle from './multiEmailStyle.module.css'
 import { FaRegTrashAlt } from "react-icons/fa";
 type MultiEmailInputProps = {
-    title: string
     emails: string[]
     onChange: (email:string[])=>void;
 }
-export default function MultiEmailInput({title, emails, onChange}:MultiEmailInputProps){
+export default function MultiEmailInput({emails, onChange}:MultiEmailInputProps){
     return(
-        <div>
-            <Text text={title}/>
+        <div className="hey">
             <ReactMultiEmail 
                 emails={emails}
                 onChange={(_emails: string[]) => onChange(_emails)}
                 getLabel={(email, index, removeEmail) => {
                     return (
-                        <div >
+                        <div className="test">
                             <div data-tag key={index} >
                                 <div data-tag-item className={multiEmailStyle.test}>
                                     {email}

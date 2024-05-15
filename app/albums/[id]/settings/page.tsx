@@ -3,7 +3,7 @@ import Input from "@/app/components/atoms/input/Input";
 import settingsStyle from './settingsStyle.module.css'
 import Text, { TextTypes } from "@/app/components/atoms/text/Text";
 import { MdEdit } from "react-icons/md";
-import Button from "@/app/components/atoms/button/Button";
+import Button, { ButtonSize, ButtonVariant } from "@/app/components/atoms/button/Button";
 import { IoMdArrowBack } from "react-icons/io";
 import Modal from "@/app/components/molecules/modal/Modal";
 import { use, useEffect, useState } from "react";
@@ -13,13 +13,52 @@ import { usePathname } from "next/navigation";
 
 export default function AlbumSettingsPage() {
     const pathName = usePathname()
+    const [album, setAlbum] = useState()
     const [modalOpen, setModalOpen] = useState(false)
     const [colaborators, setColaborators] = useState([])
-    useEffect(()=>{
-        const headers = getAuthHeaders();
-          
-        fetch(`http:///127.0.0.1:8000/albums/${pathName.split("/")[2]}/permissions`, { headers })
+    const [emails, setEmails] = useState([])
+    const [role, setRole] = useState('participant')
+    const headers = getAuthHeaders();
+    
+    useEffect(()=>{          
+        getCollaborators()
 
+        fetch(`http://127.0.0.1:8000/albums/${pathName.split("/")[2]}`, { headers })
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+            console.log(data)
+            setAlbum(data);
+        }).catch((error)=>{
+            console.log(error)
+        })
+    },[])
+
+    const handleAddCollaborator = () => {
+        const data = {
+            emails: emails,
+            role: role
+        }
+        fetch(`http:///127.0.0.1:8000/albums/${pathName.split("/")[2]}/permissions`, {
+            method:"POST", 
+            body: JSON.stringify(data),
+            headers
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+            console.log(data)
+            getCollaborators()
+            setModalOpen(false)
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }
+
+    const getCollaborators = ()=>{
+        fetch(`http:///127.0.0.1:8000/albums/${pathName.split("/")[2]}/permissions`, { headers })
         .then((res) => {
             return res.json();
         })
@@ -28,9 +67,7 @@ export default function AlbumSettingsPage() {
         }).catch((error)=>{
             console.log(error)
         })
-
-    },[]
-    )
+    }
     return(
        <div className={settingsStyle.pageContainer}>
             <IoMdArrowBack
@@ -45,14 +82,14 @@ export default function AlbumSettingsPage() {
                 </div>
                 
                 <div className={settingsStyle.inputsContainer}>
-                    <Text text={"Album settings"} type={TextTypes.HEADER} color="main-blue"/>
-                    <Input name="name" placeholder="Album Name"/>
-                    <Input name="Description" placeholder="Description"/>
-                    <Input name="name" placeholder="Album Name"/>
+                    <Text text={"Album settings"} type={TextTypes.HEADER} color="main-blue" />
+                    <Input name="title" placeholder={album?.title} disabled/>
+                    <Input name="description" placeholder={album?.description} disabled/>
+                    <Input name="label" placeholder={album?.label} disabled/>
                     
                     <div className={settingsStyle.block1Buttons}>
                         <div className={settingsStyle.checkboxContainer}>
-                            <input type="checkbox" name="isPublic" style={{width: "18px",height: "18px",cursor:"pointer"}} />
+                            <input type="checkbox" checked={album?.isPublic} disabled name="isPublic" style={{width: "18px",height: "18px",cursor:"pointer"}} />
                             <Text text="This is a public album"/>
                         </div> 
                         <Button text="Add Collaborators" onClick={()=>setModalOpen(true)}/>
@@ -61,6 +98,18 @@ export default function AlbumSettingsPage() {
             </div>
             <div>
             <Text text={"Collaborators"} type={TextTypes.HEADER} color="main-blue"/>
+            <div className={settingsStyle.colaboratorsDiv}>
+                {
+                    colaborators?.map(colaborator => {
+                        return <div>
+                             <Text text={`${colaborator.user_name}`} type={TextTypes.TEXT} color="main-blue"/>
+                             <Text text={` - `} type={TextTypes.CAPTION} color="gray"/>
+                             <Text text={`${colaborator.role.toUpperCase()}`} type={TextTypes.CAPTION} color="gray"  />
+                        </div>
+                       
+                    })
+                }
+            </div>
             </div>
             {
                 modalOpen &&
@@ -68,22 +117,33 @@ export default function AlbumSettingsPage() {
                     content={
                         <div style={{width:"100%"}}>
                             <div className={settingsStyle.emailsDiv}>
-                                <MultiEmailInput title={""} emails={[]} onChange={()=>{}}/>
+                                <MultiEmailInput emails={emails} onChange={(event)=>{setEmails(event)}}/>
                             </div>  
-                            <div>
+                            <div className={settingsStyle.selectRoleDiv}>
                                 <Text text="Role" type={TextTypes.SUBHEADER}  color="main-blue"/>
-                                <div className={settingsStyle.checkboxContainer}>
-                                    <input type="checkbox" name="viewer" style={{width: "18px",height: "18px",cursor:"pointer"}} />
-                                    <Text text="Viewer"/>
-                                </div> 
-                                <div className={settingsStyle.checkboxContainer}>
-                                    <input type="checkbox" name="phptographer" style={{width: "18px",height: "18px",cursor:"pointer"}} />
-                                    <Text text="Photographer"/>
-                                </div> 
-                                <div className={settingsStyle.checkboxContainer}>
-                                    <input type="checkbox" name="admin" style={{width: "18px",height: "18px",cursor:"pointer"}} />
-                                    <Text text="Admin"/>
-                                </div> 
+                                <select required className={settingsStyle.selectField} onInput={(event)=>setRole(event.target.value)}>
+                                    <option value="participant">PARTICIPANT</option>
+                                    <option value="photographer">PHOTOGRAPHER</option>
+                                    <option value="admin">ADMIN</option>
+                                </select>
+                            </div>
+                            <div className={settingsStyle.footerButtons}>
+                                <Button 
+                                    text='Cancel' 
+                                    size={ButtonSize.MEDIUM} 
+                                    onClick={()=>{
+                                        setModalOpen(false)
+                                        setEmails([])
+                                        setRole(undefined)
+                                    }}
+                                />
+                                <Button 
+                                    text={"Add"} 
+                                    variant={ButtonVariant.SAVE} 
+                                    size={ButtonSize.MEDIUM}
+                                    type="submit"
+                                    onClick={handleAddCollaborator}
+                                />
                             </div>                          
                         </div>
 
