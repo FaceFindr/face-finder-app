@@ -43,9 +43,9 @@ export default function NavBar({isLogged, noLinks}:NavBarProps){
                                         <Text text='My albums' link='/albums'/> 
                                         <Text text='Settings' link='/settings'/> 
 
-                                        {/* TODO: IMPLEMENT LOGOUT */}
-                                        <div onClick={handleLogout}>
-                                            <Text text='Logout'/>
+                                        <div onClick={handleLogout}  >
+                                            <span className={navBarStyle.logout}> <Text text='Logout' /></span>
+                                           
                                         </div>
                                     </>
                                 }

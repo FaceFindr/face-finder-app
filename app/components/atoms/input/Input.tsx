@@ -11,6 +11,7 @@ export type InputProps={
     width?:string;
     icon?:ReactNode;
     required?:boolean;
+    disabled?: boolean;
     onChange?: (params:any) => void;
 }
 
@@ -21,7 +22,8 @@ export default function Input(
     placeholder, 
     type="text", 
     width, 
-    icon, 
+    icon,
+    disabled,
     required, 
     onChange,
 }:InputProps){
@@ -36,6 +38,7 @@ export default function Input(
     return (
         <div className={inputContainerClasses()} style={{width:width}}>
             <input
+                disabled={disabled}
                 name={name}
                 value={value}
                 className={inputClasses()}

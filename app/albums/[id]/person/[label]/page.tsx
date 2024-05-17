@@ -21,12 +21,13 @@ const Layout = dynamic(() => import('react-masonry-list'), {
 export default function PersonPage(){
     const pathName = usePathname()
     const [photos, setPhotos] = useState([])
-    const [person, setPerson] = useState()
+    const [person, setPerson] = useState() 
     const [personLabel, setPersonLabel] = useState()
     const [isEditingLabel, setIsEditingLabel] = useState(false)
     const headers = getAuthHeaders()
 
     useEffect(()=>{
+
         const initialPersonLabel =  pathName.split("/")[4]
         fetch(`http://127.0.0.1:8000/photo/person/${initialPersonLabel}`, { headers })
         .then((res) => res.json())
@@ -36,11 +37,14 @@ export default function PersonPage(){
         
         fetch(`http://127.0.0.1:8000/person/info/${initialPersonLabel}`, { headers })
         .then((res) => res.json())
-        .then((data) => 
+        .then((data) => {
             setPerson(data)
+
+        }
 
         )
         .catch((error)=> console.log(error))
+
     }, [])
 
     const handleLabelUpdate = () => {
@@ -64,6 +68,13 @@ export default function PersonPage(){
         })
     }
 
+    useEffect(()=>{
+        if (person?.is_named && person?.label !==  pathName.split("/")[4] ){
+            window.location.replace(`/albums/${pathName.split("/")[2]}/person/${person.label}`)
+        }
+    }, [person])
+
+
     return (
         <div>
             <div className={personStyle.header}>
@@ -85,8 +96,12 @@ export default function PersonPage(){
                                 /> 
                             : <Input 
                                 name={"label"}
-                                placeholder={(!person?.isNamed ? "Unamed" : person?.label) ?? ""} 
-                                onChange={({target}) => setPersonLabel(target.value)}
+                                placeholder={(!person?.is_named ? "Unamed" : person?.label) ?? ""} 
+                                value={personLabel ?? ""} 
+                                onChange={({target}) => {
+                                        setPersonLabel(target.value.trim().replace(/ /g, ''))
+                                    }
+                                }
                             />
                         }
                         <div className={personStyle.actionButtons}>

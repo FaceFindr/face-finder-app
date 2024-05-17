@@ -44,3 +44,27 @@
     border-radius: 6px;
     margin-bottom: 1rem;
 }
+.selectRoleDiv{
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    width: 50%;
+}
+
+.selectField{
+    height: 2.5rem;
+    padding-left: 1rem;
+}
+
+.colaboratorsDiv {
+    width: 25%;
+
+
+}
+
+.footerButtons{
+    display: flex;
+    margin-top: 30px;
+    column-gap: 2rem;
+    justify-content: flex-end;
+}
