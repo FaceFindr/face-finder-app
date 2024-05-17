@@ -55,23 +55,25 @@ export default function StandardHeader({
                 {
                     hasRigthButtons && 
                     <div className={standardHeaderSyle.headerButtons}>
-                        <Button 
-                            size={ButtonSize.SMALL}  
-                            variant={ButtonVariant.OUTLINED}
-                            icon={mainButtonIcon}
-                            onClick={onClickSecondaryButton}
-                        />
-                        <Button 
-                            text={mainButtonText}
-                            size={ButtonSize.BIG}
-                            icon={secondaryButtonIcon}
-                            onClick={onClickMainButton}
-                        />
+                        {mainButtonIcon && 
+                            <Button 
+                                size={ButtonSize.SMALL}  
+                                variant={ButtonVariant.OUTLINED}
+                                icon={mainButtonIcon}
+                                onClick={onClickSecondaryButton}
+                            />
+                        }
+                        {mainButtonText && 
+                            <Button 
+                                text={mainButtonText}
+                                size={ButtonSize.BIG}
+                                icon={secondaryButtonIcon}
+                                onClick={onClickMainButton}
+                            />
+                        }
                         {additionalButton}
                     </div>
                 }
-                
-               
         </div>
     )
 }

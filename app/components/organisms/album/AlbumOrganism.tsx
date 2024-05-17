@@ -32,6 +32,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     const [searchModalOpen, setSearchModalOpen] = useState(false)
     const [persons, setPersons] = useState([]);
     const [searchResult, setSearchResult] = useState([]);
+    const [hasUploadPermission, setHasUploadPermission] = useState(false);
     const pathName = usePathname()
     
     useEffect(() => {
@@ -57,6 +58,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         })
     
         loadPhotos();
+        checkUploadPermissions();
     }, []);
 
     const handlePhotoAddition = (files:File[])=>{
@@ -115,14 +117,25 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         })
     }
 
+    const checkUploadPermissions = async () => {
+        const headers = getAuthHeaders();
+        const response = await fetch(`http://127.0.0.1:8000/albums/upload/${albumId}`, { headers });
+        const data = await response.json();
+        if (data.message === "User has necessary permissions") {
+            setHasUploadPermission(true);
+        } else {
+            setHasUploadPermission(false);
+        }
+    }
+    
 
     return (
         <div>
             {/* Header */}
             <StandardHeader 
                 title={album?.title!} 
-                mainButtonText="Upload"
-                mainButtonIcon={<IoSettingsOutline/>}
+                mainButtonText={hasUploadPermission ? "Upload" : ""}
+                mainButtonIcon={hasUploadPermission ? <IoSettingsOutline/> : null}
                 arrowBack={searchResult.length>0}
                 onClickArrowButton={()=>setSearchResult([])}
                 hasRigthButtons={searchResult.length==0}
@@ -135,7 +148,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                         onClick={()=>setSearchModalOpen(true)}
                     />
                 }
-                onClickMainButton={()=>setUploadModalOpen(true)} 
+                onClickMainButton={hasUploadPermission ? ()=>setUploadModalOpen(true) : undefined} 
                 onClickSecondaryButton={()=> location.assign(`${pathName}/settings`) }
             />
 
