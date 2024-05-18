@@ -10,16 +10,18 @@ export type AlbumCardProps = {
     showLabel: boolean
     ownerName?:string
     label?:string
+    thumbnail?:string
 }
-export default function AlbumCard({id, showLabel, title, ownerName, label}: AlbumCardProps){
+export default function AlbumCard({id, showLabel, title, ownerName, label,thumbnail  }: AlbumCardProps){
     return (
         <div className={albumCardStyle.cardContainer} onClick={() => window.location.assign(`albums/${id}`)}>
             <div className={albumCardStyle.albumThumb}>
+                {thumbnail && <img src={thumbnail} alt="Album Thumbnail" style={{width: '100%', height: '100%', objectFit: 'cover'}} />} {/* Display the thumbnail if it exists */}
             </div>
 
             <div className={albumCardStyle.albumDescription}>
                 <Text 
-                    text={title} 
+                    text={checkStringSize(title)} 
                     color="main-blue" 
                     fontSize='20px'
                 />
@@ -31,4 +33,12 @@ export default function AlbumCard({id, showLabel, title, ownerName, label}: Albu
             </div>
         </div>
     );
+}
+
+function checkStringSize(str: string): string {
+    if (str.length > 20) {
+        return str.substring(0, 16) + "...";
+    } else {
+        return str;
+    }
 }

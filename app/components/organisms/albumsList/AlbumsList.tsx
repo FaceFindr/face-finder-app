@@ -22,6 +22,7 @@ const emptyNewAlbum: Album ={
     description:"",
     label:"",
     isPublic: false,
+    thumb: ""
 }
 export default function AlbumsList(){
     const [uploadModalOpen, setUploadModalOpen] = useState(false)
@@ -83,6 +84,7 @@ export default function AlbumsList(){
 
             <Divider />
             
+
             {/* Albums */}
             <div className={albumsListStyle.albumsContainer}>
                 {albums.map(album =>{
@@ -90,6 +92,7 @@ export default function AlbumsList(){
                         <AlbumCard 
                             key={album.id}
                             id={album.id!}
+                            thumbnail={album.thumb}
                             showLabel
                             title={album.title}
                             label={album.label}
