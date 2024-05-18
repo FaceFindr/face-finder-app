@@ -22,7 +22,7 @@ const emptyNewAlbum: Album ={
     description:"",
     label:"",
     isPublic: false,
-    thumb: ""
+    thumbnail: ""
 }
 export default function AlbumsList(){
     const [uploadModalOpen, setUploadModalOpen] = useState(false)
@@ -50,7 +50,7 @@ export default function AlbumsList(){
         album.description = event.target.description.value
         album.label = event.target.label.value
         album.isPublic = event.target.isPublic.checked
-    
+        
         const token = `Bearer ${Cookies.get('jwtToken')}`;
         console.log("Token for /albums:", token);
         fetch('http://127.0.0.1:8000/albums', {
@@ -92,7 +92,7 @@ export default function AlbumsList(){
                         <AlbumCard 
                             key={album.id}
                             id={album.id!}
-                            thumbnail={album.thumb}
+                            thumbnail={album.thumbnail}
                             showLabel
                             title={album.title}
                             label={album.label}
