@@ -37,7 +37,7 @@ export default function PeopleList(){
                         return (
                            <PersonCard
                                 key={index}
-                                person={person.is_named ? person.label : "Unamed"}
+                                person={person.is_named ? person.label : "Unnamed"}
                                 thumbnail={person.thumbnail_key}
                                 onClick={()=>location.assign(`/albums/${pathName.split("/")[2]}/person/${person.label}`)}
                             /> 
