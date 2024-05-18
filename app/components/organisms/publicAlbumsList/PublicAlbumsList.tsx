@@ -36,7 +36,8 @@ export default function PublicAlbumsList(){
                             id={album.id!} 
                             title={album.title}
                             ownerName={album.ownerName!}   
-                            showLabel={false}                 
+                            showLabel={false}         
+                            thumbnail={album.thumbnail}        
                         />
                     })
                 }

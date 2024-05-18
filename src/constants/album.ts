@@ -10,7 +10,7 @@ export type Album = {
     title: string
     description?: string
     isPublic: boolean
-    thumb?: string
+    thumbnail?: string
     label?: string
     creationDate?: string
     ownerName?:string
