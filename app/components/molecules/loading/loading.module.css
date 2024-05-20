@@ -15,6 +15,11 @@
     margin-top: 20px;
 }
 
+.loadingTextB{
+    font-size: 20px;
+    font-weight: bold;
+}
+
 .loadingScreen {
     position: fixed;
     top: 0;

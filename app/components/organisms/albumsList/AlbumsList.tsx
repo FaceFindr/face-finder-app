@@ -29,7 +29,7 @@ const emptyNewAlbum: Album ={
 export default function AlbumsList(){
     const [uploadModalOpen, setUploadModalOpen] = useState(false)
     const [albums, setAlbums] = useState<Album[]>([])
-    const AlbumCard = React.lazy(() => import('../../molecules/albumCard/AlbumCard'));
+    const LazyAlbumCard = React.lazy(() => import('../../molecules/albumCard/AlbumCard'));
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -91,22 +91,35 @@ export default function AlbumsList(){
             
 
             {/* Albums */}
-            <div className={albumsListStyle.albumsContainer}>
-                <Suspense fallback={<LoadingScreen/>}>
-                    {albums.map(album =>{
-                        return (
-                            <AlbumCard 
-                                key={album.id}
-                                id={album.id!}
-                                thumbnail={album.thumbnail}
-                                showLabel
-                                title={album.title}
-                                label={album.label}
-                            />
-                        )
-                    })}
-                </Suspense>
-            </div>
+            <div className={albumsListStyle.albumsContainer} style={{ position: 'relative' }}>
+            {isLoading && (
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+            <LoadingScreen option="option1"/>
+        </div>
+    )}
+    {albums.map(album => {
+        return (
+            <Suspense fallback={<LoadingScreen option="option2"/>}>
+                <LazyAlbumCard 
+                    key={album.id}
+                    id={album.id!}
+                    thumbnail={album.thumbnail}
+                    showLabel
+                    title={album.title}
+                    label={album.label}
+                />
+            </Suspense>
+        )
+    })}
+</div>
 
             {/* Modal */}
             {uploadModalOpen &&

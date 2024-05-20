@@ -203,7 +203,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                                             className={albumListStyle.photo} 
                                             src={photo.image_key} 
                                             alt="album"
-                                            placeholder={<LoadingScreen option="option1"/>}
+                                            placeholder={<LoadingScreen option="option2"/>}
                                             // height={'100%'}
                                             // width={'100%'}
                                             onLoad={() => { // Force a re-render of the grid
@@ -218,6 +218,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                 </div>
                 :
                 <div>
+                {/* Search */}
                 <Layout
                     gap={5}
                     items={
@@ -228,7 +229,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                                         className={albumListStyle.photo} 
                                         src={photo.image_key} 
                                         alt="album"
-                                        placeholder={<LoadingScreen option="option1"/>}
+                                        placeholder={<LoadingScreen option="option2"/>}
                                         // height={'100%'}
                                         // width={'100%'}
                                         onLoad={() => { // Force a re-render of the grid
