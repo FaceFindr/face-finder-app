@@ -37,7 +37,17 @@
     background-color: white;
     color: #08263b;
 }
+.btnOutlined:hover{
+    border:1.5px solid #08263b;
+    background-color: #08263b;
+    color: white;
+}
 .btnSave{
+    border:0;
+    background-color: #3E693B;
+    color: white;
+}
+.btnSave:hover{
     border:0;
     background-color: #6CA468;
     color: white;
