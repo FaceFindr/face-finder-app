@@ -50,20 +50,21 @@ export default function PhotoSettingsPage() {
         });
     };
 
-    const downloadImage = async (albumId: string, photoId: string) => {
+    const downloadImage = async (photoId: string) => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/photo/${albumId}/details/${photoId}`, { headers });
-            const data = await response.json();
-            const url = data.image_key;
-        
-            if (!url) {
-                throw new Error('URL is undefined');
+            const response = await fetch(`http://127.0.0.1:8000/photo/download/${photoId}`, { headers });
+            const blob = await response.blob();
+            
+            if (!blob) {
+                throw new Error('Blob is undefined');
             }
-        
+            
+            const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
             link.download = `${photoId}.jpg`;
             link.click();
+            window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error('Error downloading image:', error);
         }
@@ -94,8 +95,8 @@ export default function PhotoSettingsPage() {
                         }
                     }} />
                     <Button text="Download Photo" onClick={() => {
-                        if (albumId && photoId) {
-                            downloadImage(albumId, photoId);
+                        if (photoId) {
+                            downloadImage(photoId);
                         }
                     }} />
                 </div>
