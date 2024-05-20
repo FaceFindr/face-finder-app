@@ -5,7 +5,6 @@ import { IoMdArrowBack, IoMdDownload, IoMdTrash } from "react-icons/io";
 import settingsStyle from './settingsStyle.module.css'
 import Button, { ButtonSize, ButtonVariant } from "@/app/components/atoms/button/Button";
 import { usePathname } from "next/navigation";
-
 export default function PhotoSettingsPage() {
     const [photo, setPhoto] = useState(null);
     const [albumId, setAlbumId] = useState<string | null>(null);
@@ -51,24 +50,22 @@ export default function PhotoSettingsPage() {
         });
     };
 
-    const handleDownloadPhoto = async () => {
-        if (photo?.image_key) {
-            try {
-                const response = await fetch(photo.image_key);
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'photo.jpg';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            } catch (error) {
-                console.error('Failed to download the photo:', error);
+    const downloadImage = async (albumId: string, photoId: string) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/photo/${albumId}/details/${photoId}`, { headers });
+            const data = await response.json();
+            const url = data.image_key;
+        
+            if (!url) {
+                throw new Error('URL is undefined');
             }
+        
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${photoId}.jpg`;
+            link.click();
+        } catch (error) {
+            console.error('Error downloading image:', error);
         }
     };
 
@@ -91,12 +88,16 @@ export default function PhotoSettingsPage() {
                     )}
                 </div>
                 <div className={settingsStyle.block1Buttons}>
-                <Button text="Delete Photo" onClick={() => {
-                    if (photoId) {
-                        handleDeletePhoto(photoId);
-                    }
-                }} />
-                    <Button text="Download Photo" onClick={handleDownloadPhoto} />
+                    <Button text="Delete Photo" onClick={() => {
+                        if (photoId) {
+                            handleDeletePhoto(photoId);
+                        }
+                    }} />
+                    <Button text="Download Photo" onClick={() => {
+                        if (albumId && photoId) {
+                            downloadImage(albumId, photoId);
+                        }
+                    }} />
                 </div>
             </div>
         </div>

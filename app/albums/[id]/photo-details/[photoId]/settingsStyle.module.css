@@ -46,7 +46,7 @@
 
 .photo{
     object-fit: contain;
-    max-width: 100%;
+    max-width: 60%;
 }
 
 .photoAndButtons {
@@ -58,7 +58,7 @@
 .block1Buttons {
     display: flex;
     flex-direction: column;
-    margin-left: 20px; /* adjust this value as needed */
+    gap: 5px;
 }
 
 .thumb{
