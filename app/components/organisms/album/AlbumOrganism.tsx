@@ -189,9 +189,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                         items={
                             photos.map((photo:any, index)=>{
                                 return (
-                                    <div key={index}>
-                                        <img  className={albumListStyle.photo} src={photo.image_key}/>
-                                    </div>  
+                                    <div key={index} 
+                                        onClick={() => location.assign(`/albums/${albumId}/photo-details/${photo.id}`)}>
+                                        <img className={albumListStyle.photo} src={photo.image_key}/>
+                                    </div>
                                 )
                             })
                         }
@@ -204,9 +205,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                         items={
                             searchResult.map((photo:any, index)=>{
                                 return (
-                                    <div key={index}>
-                                        <img  className={albumListStyle.photo} src={photo.image_key}/>
-                                    </div>  
+                                    <div key={index} 
+                                        onClick={() => location.assign(`/albums/${albumId}/photo-details/${photo.id}`)}>
+                                        <img className={albumListStyle.photo} src={photo.image_key}/>
+                                    </div>
                                 )
                             })
                         }
