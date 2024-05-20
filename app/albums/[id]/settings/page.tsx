@@ -111,7 +111,7 @@ export default function AlbumSettingsPage() {
                         <img
                             src={album.thumbnail}
                             alt="Album Thumbnail"
-                            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '16px' }}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '16px', cursor: 'pointer'}}
                         />
                     )}
                     <MdEdit className={settingsStyle.editIcon} />

@@ -7,7 +7,6 @@
     display: flex;
     justify-content: space-evenly;
     column-gap: 10rem;
-    position: relative;
 }
 .thumb {
     width: 300px;
