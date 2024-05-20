@@ -201,9 +201,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                         items={
                             photos.map((photo:any, index)=>{
                                 return (
-                                    <div key={index}>
+                                    <div key={index} 
+                                        onClick={() => location.assign(`/albums/${albumId}/photo-details/${photo.id}`)}>
                                         <LazyLoadImage 
-                                            className={albumListStyle.photo} 
+                                           className={albumListStyle.photo} 
                                             src={photo.image_key} 
                                             alt="album"
                                             placeholder={<LoadingScreen option="option2"/>}
@@ -213,7 +214,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                                                 setPhotos([...photos]);
                                             }}
                                         />
-                                    </div>  
+                                    </div>
                                 )
                             })
                         }
@@ -227,9 +228,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                     items={
                         searchResult.map((photo:any, index)=>{
                             return (
-                                <div key={index}>
+                                <div key={index} 
+                                        onClick={() => location.assign(`/albums/${albumId}/photo-details/${photo.id}`)}>
                                     <LazyLoadImage 
-                                        className={albumListStyle.photo} 
+                                       className={albumListStyle.photo} 
                                         src={photo.image_key} 
                                         alt="album"
                                         placeholder={<LoadingScreen option="option2"/>}
@@ -239,7 +241,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                                             setPhotos([...photos]);
                                         }}
                                     />
-                                </div>  
+                                </div>
                             )
                         })
                     }
