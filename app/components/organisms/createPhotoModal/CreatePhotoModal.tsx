@@ -34,7 +34,11 @@ export default function CreatePhotoModal({title, description, search, confirmBut
             {
                 <div style={{width: '100%', height: '100%'}}>
                     <div className={createPhotoModalStyle.photoModalContainer}>
-                        {isLoading ? <LoadingScreen /> : (
+                        {isLoading ? 
+                            <div style={{position: 'absolute', left: 0, right: 0, bottom: 0}}>
+                                <LoadingScreen />
+                            </div>
+                            : 
                             <>
                                 <div className={createPhotoModalStyle.list}>
                                     {
@@ -88,7 +92,7 @@ export default function CreatePhotoModal({title, description, search, confirmBut
                                     />
                                 </div>
                             </>
-                        )}
+                        }
                     </div>
                 </div>
             }

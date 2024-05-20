@@ -17,6 +17,7 @@ import Modal from "../../molecules/modal/Modal";
 import { usePathname } from "next/navigation";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import LoadingScreen from "../../molecules/loading/Loading";
+import React, { Suspense } from 'react';
 
 
 const Layout = dynamic(() => import('react-masonry-list'), {
@@ -37,6 +38,8 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     const [hasUploadPermission, setHasUploadPermission] = useState(false);
     const pathName = usePathname()
     const [isLoading, setIsLoading] = useState(true);
+
+    const LazyPersonCard = React.lazy(() => import('../../molecules/personCard/PersonCard').then(module => ({ default: module.PersonCard })));
     
     useEffect(() => {
         const headers = getAuthHeaders();
@@ -181,7 +184,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                         <div className={albumListStyle.personCards}>
                             {persons.map((person:any, index) => {
                                 return (
-                                    <PersonCard 
+                                    <LazyPersonCard 
                                         key={index} 
                                         person={person.is_named ? person.label : "Unnamed"} 
                                         onClick={()=>location.assign(`/albums/${albumId}/person/${person.label}`)}
