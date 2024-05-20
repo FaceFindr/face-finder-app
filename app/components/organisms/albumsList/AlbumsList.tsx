@@ -13,6 +13,8 @@ import StandardHeader from "../../molecules/standardHearder/StandardHeader";
 import { IoFilter } from "react-icons/io5";
 import Cookies from 'js-cookie';
 import { getAuthHeaders } from "@/app/utils/requestHeader";
+import React, { Suspense } from 'react';
+import LoadingScreen from "../../molecules/loading/Loading";
 
 
 
@@ -27,6 +29,8 @@ const emptyNewAlbum: Album ={
 export default function AlbumsList(){
     const [uploadModalOpen, setUploadModalOpen] = useState(false)
     const [albums, setAlbums] = useState<Album[]>([])
+    const AlbumCard = React.lazy(() => import('../../molecules/albumCard/AlbumCard'));
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const headers = getAuthHeaders();
@@ -37,6 +41,7 @@ export default function AlbumsList(){
         })
         .then((data) => {
             setAlbums(data);
+            setIsLoading(false);
         }).catch((error)=>{
             console.log(error)
         })
@@ -87,18 +92,20 @@ export default function AlbumsList(){
 
             {/* Albums */}
             <div className={albumsListStyle.albumsContainer}>
-                {albums.map(album =>{
-                    return (
-                        <AlbumCard 
-                            key={album.id}
-                            id={album.id!}
-                            thumbnail={album.thumbnail}
-                            showLabel
-                            title={album.title}
-                            label={album.label}
-                        />
-                    )
-                })}
+                <Suspense fallback={<LoadingScreen/>}>
+                    {albums.map(album =>{
+                        return (
+                            <AlbumCard 
+                                key={album.id}
+                                id={album.id!}
+                                thumbnail={album.thumbnail}
+                                showLabel
+                                title={album.title}
+                                label={album.label}
+                            />
+                        )
+                    })}
+                </Suspense>
             </div>
 
             {/* Modal */}
