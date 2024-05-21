@@ -74,9 +74,9 @@ export default function SignUp(){
                     <div className={signUpStyle.buttonsContainer}>
                         <Button text="Sign up" type="submit" size={ButtonSize.FULL}/>
                     </div>
-                    <div style={{marginTop:"10px"}}>
+                    <div style={{marginTop:"10px", display:"flex", gap:"5px"}}>
                         <Text text="Already have an account?" type={TextTypes.CAPTION} />
-                        <Link href="logIn"><Text text="Log in" type={TextTypes.CAPTION}/></Link> 
+                        <Text link="./logIn" text="Log in" type={TextTypes.CAPTION}/> 
                     </div>
                 </div>
 
