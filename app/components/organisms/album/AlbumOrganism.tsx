@@ -2,7 +2,7 @@
 
 import Text, { TextTypes } from "@/app/components/atoms/text/Text";
 import { IoFilter, IoSettingsOutline } from "react-icons/io5";
-import { MdOutlineCloudUpload } from "react-icons/md";
+import { MdHeight, MdOutlineCloudUpload } from "react-icons/md";
 import albumListStyle from './albumListStyle.module.css'
 import Divider from "@/app/components/atoms/divider/Divider";
 import { useEffect, useState } from "react";
@@ -15,6 +15,9 @@ import StandardHeader from "../../molecules/standardHearder/StandardHeader";
 import Button, { ButtonSize, ButtonVariant } from "../../atoms/button/Button";
 import Modal from "../../molecules/modal/Modal";
 import { usePathname } from "next/navigation";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import LoadingScreen from "../../molecules/loading/Loading";
+import React, { Suspense } from 'react';
 
 
 const Layout = dynamic(() => import('react-masonry-list'), {
@@ -35,6 +38,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     const [hasUploadPermission, setHasUploadPermission] = useState(false);
     const [hasSettingsPermission, setHasSettingsPermission] = useState(false);
     const pathName = usePathname()
+    const [isLoading, setIsLoading] = useState(true);
     
     useEffect(() => {
         const headers = getAuthHeaders();
@@ -44,6 +48,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         })
         .then((data) => {
             setAlbum(data);
+            // setIsLoading(false);
         }).catch((error)=>{
             console.log(error)
         })
@@ -125,8 +130,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         const data = await response.json();
         if (data.message === "User has necessary permissions") {
             setHasUploadPermission(true);
+            setIsLoading(false);
         } else {
             setHasUploadPermission(false);
+            setIsLoading(false);
         }
     }
 
@@ -141,6 +148,9 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         }
     }
     
+    if (isLoading) {
+        return <LoadingScreen option="option1"/>;
+    }
 
     return (
         <div>
@@ -204,7 +214,17 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                                 return (
                                     <div key={index} 
                                         onClick={() => location.assign(`/albums/${albumId}/photo-details/${photo.id}`)}>
-                                        <img className={albumListStyle.photo} src={photo.image_key}/>
+                                        <LazyLoadImage 
+                                           className={albumListStyle.photo} 
+                                            src={photo.image_key} 
+                                            alt="album"
+                                            placeholder={<LoadingScreen option="option2"/>}
+                                            // height={'100%'}
+                                            // width={'100%'}
+                                            onLoad={() => { // Force a re-render of the grid
+                                                setPhotos([...photos]);
+                                            }}
+                                        />
                                     </div>
                                 )
                             })
@@ -213,20 +233,32 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                 </div>
                 :
                 <div>
-                    <Layout
-                        gap={5}
-                        items={
-                            searchResult.map((photo:any, index)=>{
-                                return (
-                                    <div key={index} 
+                {/* Search */}
+                <Layout
+                    gap={5}
+                    items={
+                        searchResult.map((photo:any, index)=>{
+                            return (
+                                <div key={index} 
                                         onClick={() => location.assign(`/albums/${albumId}/photo-details/${photo.id}`)}>
-                                        <img className={albumListStyle.photo} src={photo.image_key}/>
-                                    </div>
-                                )
-                            })
-                        }
-                    />
+                                    <LazyLoadImage 
+                                       className={albumListStyle.photo} 
+                                        src={photo.image_key} 
+                                        alt="album"
+                                        placeholder={<LoadingScreen option="option2"/>}
+                                        // height={'100%'}
+                                        // width={'100%'}
+                                        onLoad={() => { // Force a re-render of the grid
+                                            setPhotos([...photos]);
+                                        }}
+                                    />
+                                </div>
+                            )
+                        })
+                    }
+                />
                 </div>
+                
             }
 
 

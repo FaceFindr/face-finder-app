@@ -26,7 +26,7 @@ export default function AlbumCard({id, showLabel, title, ownerName, label,thumbn
                     fontSize='20px'
                 />
                 <Text 
-                    text={!showLabel ? `By ${ownerName}` : label ?? "" } 
+                    text={checkStringSize(!showLabel ? `By ${ownerName}` : label ?? "") } 
                     color="main-blue" 
                     type={TextTypes.CAPTION} 
                 />
@@ -36,8 +36,8 @@ export default function AlbumCard({id, showLabel, title, ownerName, label,thumbn
 }
 
 function checkStringSize(str: string): string {
-    if (str.length > 20) {
-        return str.substring(0, 16) + "...";
+    if (str.length >= 20) {
+        return str.substring(0, 17) + "...";
     } else {
         return str;
     }
