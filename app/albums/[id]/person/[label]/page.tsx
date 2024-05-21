@@ -16,6 +16,8 @@ import { FaCheck } from "react-icons/fa";
 import LoadingScreen from "@/app/components/molecules/loading/Loading";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import personPageSyle from './personPageSyle.module.css'
+import { get } from "http";
+
 
 const Layout = dynamic(() => import('react-masonry-list'), {
     ssr: false,
@@ -27,6 +29,7 @@ export default function PersonPage(){
     const [person, setPerson] = useState() 
     const [personLabel, setPersonLabel] = useState()
     const [isEditingLabel, setIsEditingLabel] = useState(false)
+    const [isEditable, setIsEditable] = useState(false)
     const headers = getAuthHeaders()
     const [isLoading, setIsLoading] = useState(true)
 
@@ -51,6 +54,7 @@ export default function PersonPage(){
             console.log(error)
             setIsLoading(false)    
         })
+        checkEditPermissions()
 
     }, [])
 
@@ -75,13 +79,28 @@ export default function PersonPage(){
         })
     }
 
+    const checkEditPermissions = async () => {
+        if (person) {
+            const headers = getAuthHeaders()
+            const albumId = pathName.split("/")[2];
+            const response = await fetch(`http://127.0.0.1:8000/person/editPermissions/${albumId}`, { headers });
+            const data = await response.json();
+            if (data.message === "User has necessary permissions"){
+                setIsEditable(true)
+            }else{
+                setIsEditable(false)
+            }
+        }
+    }
+
     useEffect(()=>{
         if (person?.is_named && person?.label !==  pathName.split("/")[4] ){
             window.location.replace(`/albums/${pathName.split("/")[2]}/person/${person.label}`)
         }
+        checkEditPermissions()
     }, [person])
 
-
+    
     return (
         <div>
             {isLoading ? (
@@ -96,6 +115,7 @@ export default function PersonPage(){
                                 color="#08263b"
                                 onClick={()=>history.back()}
                             />
+
                             
                             <div className={personStyle.personLabelDiv}>
                                 {
@@ -117,11 +137,9 @@ export default function PersonPage(){
                                 }
                                 <div className={personStyle.actionButtons}>
                                     {isEditingLabel &&  <FaCheck onClick={handleLabelUpdate}/>}
-                                    {!isEditingLabel && <MdEdit onClick={()=>setIsEditingLabel(true)}/>}
+                                    {isEditable && !isEditingLabel && <MdEdit onClick={()=>setIsEditingLabel(true)}/>}
                                     {isEditingLabel &&  <FcCancel onClick={()=>setIsEditingLabel(false)} className={personStyle.cancelButton}/>}
                                 </div>
-                        </div>
-
                     </div>
 
                     <div className={personStyle.thumb}>
