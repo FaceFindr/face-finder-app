@@ -90,13 +90,13 @@ export default function PersonPage(){
                         {
                             !isEditingLabel ?
                                 <Text
-                                    text={!person?.is_named ? "Unamed" : person?.label} 
+                                    text={!person?.is_named ? "Unnamed" : person?.label} 
                                     type={TextTypes.HEADER}
                                     color="main-blue"
                                 /> 
                             : <Input 
                                 name={"label"}
-                                placeholder={(!person?.is_named ? "Unamed" : person?.label) ?? ""} 
+                                placeholder={(!person?.is_named ? "Unnamed" : person?.label) ?? ""} 
                                 value={personLabel ?? ""} 
                                 onChange={({target}) => {
                                         setPersonLabel(target.value.trim().replace(/ /g, ''))

@@ -10,7 +10,7 @@ export type NavBarProps = {
 export default function NavBar({isLogged, noLinks}:NavBarProps){
     const handleLogout = ()=>{
         cookies.remove('jwtToken');
-        location.replace('auth/logIn')
+        location.replace('/auth/logIn')
         
     }
     return(

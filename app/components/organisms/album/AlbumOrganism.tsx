@@ -174,7 +174,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                                 return (
                                     <PersonCard 
                                         key={index} 
-                                        person={person.is_named ? person.label : "Unamed"} 
+                                        person={person.is_named ? person.label : "Unnamed"} 
                                         onClick={()=>location.assign(`/albums/${albumId}/person/${person.label}`)}
                                         thumbnail={person.thumbnail_key}
                                     />
@@ -189,9 +189,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                         items={
                             photos.map((photo:any, index)=>{
                                 return (
-                                    <div key={index}>
-                                        <img  className={albumListStyle.photo} src={photo.image_key}/>
-                                    </div>  
+                                    <div key={index} 
+                                        onClick={() => location.assign(`/albums/${albumId}/photo-details/${photo.id}`)}>
+                                        <img className={albumListStyle.photo} src={photo.image_key}/>
+                                    </div>
                                 )
                             })
                         }
@@ -204,9 +205,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                         items={
                             searchResult.map((photo:any, index)=>{
                                 return (
-                                    <div key={index}>
-                                        <img  className={albumListStyle.photo} src={photo.image_key}/>
-                                    </div>  
+                                    <div key={index} 
+                                        onClick={() => location.assign(`/albums/${albumId}/photo-details/${photo.id}`)}>
+                                        <img className={albumListStyle.photo} src={photo.image_key}/>
+                                    </div>
                                 )
                             })
                         }
