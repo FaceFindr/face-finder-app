@@ -186,7 +186,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                 secondaryButtonIcon={<MdOutlineCloudUpload />}
                 additionalButton={
                     <Button 
-                        text={"Seach"}
+                        text={"Search"}
                         size={ButtonSize.BIG}
                         variant={ButtonVariant.OUTLINED}
                         onClick={()=>setSearchModalOpen(true)}
