@@ -8,8 +8,8 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 export default function SignUp(){
-    const [showPassword, setShowPassword] = useState(false)
-
+    const [showPassword, setShowPassword] = useState(false);
+    const [passwordError, setPasswordError] = useState('');
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
@@ -28,6 +28,8 @@ export default function SignUp(){
         if (response.ok) {
             console.log('User created sucessfully');            
             window.location.replace("/auth/logIn")
+        } else if (response.status === 400) {
+            setPasswordError("Password should be at least 6 characters.");
         } else {
             const data = await response.json();
             if (data.error === "A user with this email already exists") {
@@ -38,6 +40,7 @@ export default function SignUp(){
         }
 
     }
+
 
     return (
         <div className={baseAuthStyle.pageContainer}>
@@ -68,7 +71,7 @@ export default function SignUp(){
                             />
                         }
                     />
-                    
+                    {passwordError && <div style={{color: 'red'}}>{passwordError}</div>}
                 </div>  
                 <div>
                     <div className={signUpStyle.buttonsContainer}>

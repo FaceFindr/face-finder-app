@@ -2,7 +2,7 @@
 
 import Text, { TextTypes } from "@/app/components/atoms/text/Text";
 import { IoFilter, IoSettingsOutline } from "react-icons/io5";
-import { MdOutlineCloudUpload } from "react-icons/md";
+import { MdHeight, MdOutlineCloudUpload } from "react-icons/md";
 import albumListStyle from './albumListStyle.module.css'
 import Divider from "@/app/components/atoms/divider/Divider";
 import { useEffect, useState } from "react";
@@ -15,6 +15,9 @@ import StandardHeader from "../../molecules/standardHearder/StandardHeader";
 import Button, { ButtonSize, ButtonVariant } from "../../atoms/button/Button";
 import Modal from "../../molecules/modal/Modal";
 import { usePathname } from "next/navigation";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import LoadingScreen from "../../molecules/loading/Loading";
+import React, { Suspense } from 'react';
 
 
 const Layout = dynamic(() => import('react-masonry-list'), {
@@ -33,22 +36,34 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     const [persons, setPersons] = useState([]);
     const [searchResult, setSearchResult] = useState([]);
     const [hasUploadPermission, setHasUploadPermission] = useState(false);
+    const [hasSettingsPermission, setHasSettingsPermission] = useState(false);
     const pathName = usePathname()
+    const [isLoading, setIsLoading] = useState(true);
+    const [isUnauthorized, setIsUnauthorized] = useState(false);
     
     useEffect(() => {
         const headers = getAuthHeaders();
         fetch(`http://127.0.0.1:8000/albums/${albumId}`, { headers })
         .then((res) => {
+            if (res.status === 401) {
+                setIsUnauthorized(true);
+                throw new Error('Unauthorized');
+            }
             return res.json();
         })
         .then((data) => {
             setAlbum(data);
+            // setIsLoading(false);
         }).catch((error)=>{
             console.log(error)
         })
     
         fetch(`http://127.0.0.1:8000/person/${albumId}`, { headers })
         .then((res) => {
+            if (res.status === 401) {
+                setIsUnauthorized(true);
+                throw new Error('Unauthorized');
+            }
             return res.json();
         })
         .then((data) => {
@@ -59,6 +74,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     
         loadPhotos();
         checkUploadPermissions();
+        checkSettingsPermissions();
     }, []);
 
     const handlePhotoAddition = (files:File[])=>{
@@ -75,6 +91,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
             headers
         })
         .then((res) => {
+            if (res.status === 401) {
+                setIsUnauthorized(true);
+                throw new Error('Unauthorized');
+            }
             setUploadModalOpen(false)
             loadPhotos()
             return res.json();
@@ -87,6 +107,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         const headers = getAuthHeaders();
         fetch(`http://127.0.0.1:8000/photo/${albumId}`, { headers })
         .then((res) => {
+            if (res.status === 401) {
+                setIsUnauthorized(true);
+                throw new Error('Unauthorized');
+            }
             return res.json();
         })
         .then((data) => {
@@ -123,19 +147,39 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         const data = await response.json();
         if (data.message === "User has necessary permissions") {
             setHasUploadPermission(true);
+            setIsLoading(false);
         } else {
             setHasUploadPermission(false);
+            setIsLoading(false);
+        }
+    }
+
+    const checkSettingsPermissions = async () => {
+        const headers = getAuthHeaders();
+        const response = await fetch(`http://127.0.0.1:8000/albums/settings/${albumId}`, { headers });
+        const data = await response.json();
+        if (data.message === "User has necessary permissions") {
+            setHasSettingsPermission(true);
+        } else {
+            setHasSettingsPermission(false);
         }
     }
     
+    if (isLoading) {
+        return <LoadingScreen option="option1"/>;
+    }
 
+    if (isUnauthorized) {
+        return <div style={{ color: 'red' }}>You do not have access to this album.</div>;
+    }
+    
     return (
         <div>
             {/* Header */}
             <StandardHeader 
                 title={album?.title!} 
                 mainButtonText={hasUploadPermission ? "Upload" : ""}
-                mainButtonIcon={hasUploadPermission ? <IoSettingsOutline/> : null}
+                mainButtonIcon={hasSettingsPermission ? <IoSettingsOutline/> : null}
                 arrowBack={searchResult.length>0}
                 onClickArrowButton={()=>setSearchResult([])}
                 hasRigthButtons={searchResult.length==0}
@@ -189,9 +233,20 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                         items={
                             photos.map((photo:any, index)=>{
                                 return (
-                                    <div key={index}>
-                                        <img  className={albumListStyle.photo} src={photo.image_key}/>
-                                    </div>  
+                                    <div key={index} 
+                                        onClick={() => location.assign(`/albums/${albumId}/photo-details/${photo.id}`)}>
+                                        <LazyLoadImage 
+                                           className={albumListStyle.photo} 
+                                            src={photo.image_key} 
+                                            alt="album"
+                                            placeholder={<LoadingScreen option="option2"/>}
+                                            // height={'100%'}
+                                            // width={'100%'}
+                                            onLoad={() => { // Force a re-render of the grid
+                                                setPhotos([...photos]);
+                                            }}
+                                        />
+                                    </div>
                                 )
                             })
                         }
@@ -199,19 +254,32 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
                 </div>
                 :
                 <div>
-                    <Layout
-                        gap={5}
-                        items={
-                            searchResult.map((photo:any, index)=>{
-                                return (
-                                    <div key={index}>
-                                        <img  className={albumListStyle.photo} src={photo.image_key}/>
-                                    </div>  
-                                )
-                            })
-                        }
-                    />
+                {/* Search */}
+                <Layout
+                    gap={5}
+                    items={
+                        searchResult.map((photo:any, index)=>{
+                            return (
+                                <div key={index} 
+                                        onClick={() => location.assign(`/albums/${albumId}/photo-details/${photo.id}`)}>
+                                    <LazyLoadImage 
+                                       className={albumListStyle.photo} 
+                                        src={photo.image_key} 
+                                        alt="album"
+                                        placeholder={<LoadingScreen option="option2"/>}
+                                        // height={'100%'}
+                                        // width={'100%'}
+                                        onLoad={() => { // Force a re-render of the grid
+                                            setPhotos([...photos]);
+                                        }}
+                                    />
+                                </div>
+                            )
+                        })
+                    }
+                />
                 </div>
+                
             }
 
 
