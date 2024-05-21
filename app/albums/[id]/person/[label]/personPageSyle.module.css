@@ -24,3 +24,8 @@
 .cancelButton{
     margin-top: 10px;
 }
+
+.photo{
+    object-fit: contain;
+    max-width: 100%;
+}

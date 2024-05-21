@@ -14,19 +14,14 @@
     border-radius: 16px;
     display: flex;
     justify-content: flex-end;
-    align-items: flex-end; /* Align items to the bottom */
     padding: 1rem;
     background-color: whitesmoke;
-    position: relative; /* Added relative positioning */
 }
 
 .editIcon {
     font-size: 1.5rem;
     cursor: pointer;
-    position: absolute; /* Adjusted for absolute positioning */
-    top: 30px; /* Positioned relative to the bottom */
-    right: 30px; /* Positioned relative to the right */
-    z-index: 1; /* Ensure the icon appears above other elements */
+    position: absolute;
 }
 
 .inputsContainer{
