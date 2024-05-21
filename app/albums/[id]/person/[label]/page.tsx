@@ -140,6 +140,7 @@ export default function PersonPage(){
                                     {isEditable && !isEditingLabel && <MdEdit onClick={()=>setIsEditingLabel(true)}/>}
                                     {isEditingLabel &&  <FcCancel onClick={()=>setIsEditingLabel(false)} className={personStyle.cancelButton}/>}
                                 </div>
+                            </div>
                     </div>
 
                     <div className={personStyle.thumb}>
