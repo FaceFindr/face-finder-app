@@ -13,6 +13,9 @@ import { MdEdit } from "react-icons/md";
 import Input from "@/app/components/atoms/input/Input";
 import { FcCancel } from "react-icons/fc";
 import { FaCheck } from "react-icons/fa";
+import LoadingScreen from "@/app/components/molecules/loading/Loading";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import personPageSyle from './personPageSyle.module.css'
 
 const Layout = dynamic(() => import('react-masonry-list'), {
     ssr: false,
@@ -25,6 +28,7 @@ export default function PersonPage(){
     const [personLabel, setPersonLabel] = useState()
     const [isEditingLabel, setIsEditingLabel] = useState(false)
     const headers = getAuthHeaders()
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(()=>{
 
@@ -39,11 +43,14 @@ export default function PersonPage(){
         .then((res) => res.json())
         .then((data) => {
             setPerson(data)
-
+            setIsLoading(false)
         }
 
         )
-        .catch((error)=> console.log(error))
+        .catch((error)=> {
+            console.log(error)
+            setIsLoading(false)    
+        })
 
     }, [])
 
@@ -77,64 +84,79 @@ export default function PersonPage(){
 
     return (
         <div>
-            <div className={personStyle.header}>
-                <div style={{display:"flex"}}>
-                    <IoMdArrowBack
-                        cursor={"pointer"}
-                        fontSize={"50px"}
-                        color="#08263b"
-                        onClick={()=>history.back()}
-                    />
-                    
-                    <div className={personStyle.personLabelDiv}>
-                        {
-                            !isEditingLabel ?
-                                <Text
-                                    text={!person?.is_named ? "Unnamed" : person?.label} 
-                                    type={TextTypes.HEADER}
-                                    color="main-blue"
-                                /> 
-                            : <Input 
-                                name={"label"}
-                                placeholder={(!person?.is_named ? "Unnamed" : person?.label) ?? ""} 
-                                value={personLabel ?? ""} 
-                                onChange={({target}) => {
-                                        setPersonLabel(target.value.trim().replace(/ /g, ''))
-                                    }
-                                }
+            {isLoading ? (
+                <LoadingScreen/> // Display a loading screen when isLoading is true
+            ) : (
+                <div>
+                    <div className={personStyle.header}>
+                        <div style={{display:"flex"}}>
+                            <IoMdArrowBack
+                                cursor={"pointer"}
+                                fontSize={"50px"}
+                                color="#08263b"
+                                onClick={()=>history.back()}
                             />
-                        }
-                        <div className={personStyle.actionButtons}>
-                            {isEditingLabel &&  <FaCheck onClick={handleLabelUpdate}/>}
-                            {!isEditingLabel && <MdEdit onClick={()=>setIsEditingLabel(true)}/>}
-                            {isEditingLabel &&  <FcCancel onClick={()=>setIsEditingLabel(false)} className={personStyle.cancelButton}/>}
+                            
+                            <div className={personStyle.personLabelDiv}>
+                                {
+                                    !isEditingLabel ?
+                                        <Text
+                                            text={!person?.is_named ? "Unnamed" : person?.label} 
+                                            type={TextTypes.HEADER}
+                                            color="main-blue"
+                                        /> 
+                                    : <Input 
+                                        name={"label"}
+                                        placeholder={(!person?.is_named ? "Unnamed" : person?.label) ?? ""} 
+                                        value={personLabel ?? ""} 
+                                        onChange={({target}) => {
+                                                setPersonLabel(target.value.trim().replace(/ /g, ''))
+                                            }
+                                        }
+                                    />
+                                }
+                                <div className={personStyle.actionButtons}>
+                                    {isEditingLabel &&  <FaCheck onClick={handleLabelUpdate}/>}
+                                    {!isEditingLabel && <MdEdit onClick={()=>setIsEditingLabel(true)}/>}
+                                    {isEditingLabel &&  <FcCancel onClick={()=>setIsEditingLabel(false)} className={personStyle.cancelButton}/>}
+                                </div>
                         </div>
+
                     </div>
 
+                    <div className={personStyle.thumb}>
+                        <img className={personStyle.thumb} src={person?.thumbnail_key ?? ""}/>
+                    </div>
+                    </div>
+
+
+                    <Divider />
+
+                    {/* Photos */}
+                    <Layout
+                        gap={5}
+                        items={
+                            photos.map((photo:any, index)=>{
+                                return (
+                                    <div key={index}>
+                                        <LazyLoadImage 
+                                       className={personPageSyle.photo} 
+                                        src={photo.image_key} 
+                                        alt="album"
+                                        placeholder={<LoadingScreen option="option2"/>}
+                                        // height={'100%'}
+                                        // width={'100%'}
+                                        onLoad={() => { // Force a re-render of the grid
+                                            setPhotos([...photos]);
+                                        }}
+                                    />
+                                    </div>  
+                                )
+                            })
+                        }
+                    />
                 </div>
-
-                <div className={personStyle.thumb}>
-                    <img className={personStyle.thumb} src={person?.thumbnail_key ?? ""}/>
-                </div>
-            </div>
-
-            <Divider />
-
-           
-            
-            {/* Photos */}
-            <Layout
-                gap={5}
-                items={
-                    photos.map((photo:any, index)=>{
-                        return (
-                            <div key={index}>
-                                <img style={{objectFit:"contain", maxWidth:"100%"}} src={photo.image_key}/>
-                            </div>  
-                        )
-                    })
-                }
-            />
+            )}
         </div>
     )
 }
