@@ -39,11 +39,16 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     const [hasSettingsPermission, setHasSettingsPermission] = useState(false);
     const pathName = usePathname()
     const [isLoading, setIsLoading] = useState(true);
+    const [isUnauthorized, setIsUnauthorized] = useState(false);
     
     useEffect(() => {
         const headers = getAuthHeaders();
         fetch(`http://127.0.0.1:8000/albums/${albumId}`, { headers })
         .then((res) => {
+            if (res.status === 401) {
+                setIsUnauthorized(true);
+                throw new Error('Unauthorized');
+            }
             return res.json();
         })
         .then((data) => {
@@ -55,6 +60,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     
         fetch(`http://127.0.0.1:8000/person/${albumId}`, { headers })
         .then((res) => {
+            if (res.status === 401) {
+                setIsUnauthorized(true);
+                throw new Error('Unauthorized');
+            }
             return res.json();
         })
         .then((data) => {
@@ -82,6 +91,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
             headers
         })
         .then((res) => {
+            if (res.status === 401) {
+                setIsUnauthorized(true);
+                throw new Error('Unauthorized');
+            }
             setUploadModalOpen(false)
             loadPhotos()
             return res.json();
@@ -94,6 +107,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         const headers = getAuthHeaders();
         fetch(`http://127.0.0.1:8000/photo/${albumId}`, { headers })
         .then((res) => {
+            if (res.status === 401) {
+                setIsUnauthorized(true);
+                throw new Error('Unauthorized');
+            }
             return res.json();
         })
         .then((data) => {
@@ -152,6 +169,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         return <LoadingScreen option="option1"/>;
     }
 
+    if (isUnauthorized) {
+        return <div style={{ color: 'red' }}>You do not have access to this album.</div>;
+    }
+    
     return (
         <div>
             {/* Header */}
