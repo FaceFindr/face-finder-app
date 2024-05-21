@@ -33,6 +33,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     const [persons, setPersons] = useState([]);
     const [searchResult, setSearchResult] = useState([]);
     const [hasUploadPermission, setHasUploadPermission] = useState(false);
+    const [hasSettingsPermission, setHasSettingsPermission] = useState(false);
     const pathName = usePathname()
     
     useEffect(() => {
@@ -59,6 +60,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     
         loadPhotos();
         checkUploadPermissions();
+        checkSettingsPermissions();
     }, []);
 
     const handlePhotoAddition = (files:File[])=>{
@@ -127,6 +129,17 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
             setHasUploadPermission(false);
         }
     }
+
+    const checkSettingsPermissions = async () => {
+        const headers = getAuthHeaders();
+        const response = await fetch(`http://127.0.0.1:8000/albums/settings/${albumId}`, { headers });
+        const data = await response.json();
+        if (data.message === "User has necessary permissions") {
+            setHasSettingsPermission(true);
+        } else {
+            setHasSettingsPermission(false);
+        }
+    }
     
 
     return (
@@ -135,7 +148,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
             <StandardHeader 
                 title={album?.title!} 
                 mainButtonText={hasUploadPermission ? "Upload" : ""}
-                mainButtonIcon={hasUploadPermission ? <IoSettingsOutline/> : null}
+                mainButtonIcon={hasSettingsPermission ? <IoSettingsOutline/> : null}
                 arrowBack={searchResult.length>0}
                 onClickArrowButton={()=>setSearchResult([])}
                 hasRigthButtons={searchResult.length==0}
