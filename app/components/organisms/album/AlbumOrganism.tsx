@@ -36,13 +36,19 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     const [persons, setPersons] = useState([]);
     const [searchResult, setSearchResult] = useState([]);
     const [hasUploadPermission, setHasUploadPermission] = useState(false);
+    const [hasSettingsPermission, setHasSettingsPermission] = useState(false);
     const pathName = usePathname()
     const [isLoading, setIsLoading] = useState(true);
+    const [isUnauthorized, setIsUnauthorized] = useState(false);
     
     useEffect(() => {
         const headers = getAuthHeaders();
         fetch(`http://127.0.0.1:8000/albums/${albumId}`, { headers })
         .then((res) => {
+            if (res.status === 401) {
+                setIsUnauthorized(true);
+                throw new Error('Unauthorized');
+            }
             return res.json();
         })
         .then((data) => {
@@ -54,6 +60,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     
         fetch(`http://127.0.0.1:8000/person/${albumId}`, { headers })
         .then((res) => {
+            if (res.status === 401) {
+                setIsUnauthorized(true);
+                throw new Error('Unauthorized');
+            }
             return res.json();
         })
         .then((data) => {
@@ -64,6 +74,7 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
     
         loadPhotos();
         checkUploadPermissions();
+        checkSettingsPermissions();
     }, []);
 
     const handlePhotoAddition = (files:File[])=>{
@@ -80,6 +91,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
             headers
         })
         .then((res) => {
+            if (res.status === 401) {
+                setIsUnauthorized(true);
+                throw new Error('Unauthorized');
+            }
             setUploadModalOpen(false)
             loadPhotos()
             return res.json();
@@ -92,6 +107,10 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
         const headers = getAuthHeaders();
         fetch(`http://127.0.0.1:8000/photo/${albumId}`, { headers })
         .then((res) => {
+            if (res.status === 401) {
+                setIsUnauthorized(true);
+                throw new Error('Unauthorized');
+            }
             return res.json();
         })
         .then((data) => {
@@ -134,18 +153,33 @@ export default function AlbumOrganism({albumId}: AlbumListProps){
             setIsLoading(false);
         }
     }
+
+    const checkSettingsPermissions = async () => {
+        const headers = getAuthHeaders();
+        const response = await fetch(`http://127.0.0.1:8000/albums/settings/${albumId}`, { headers });
+        const data = await response.json();
+        if (data.message === "User has necessary permissions") {
+            setHasSettingsPermission(true);
+        } else {
+            setHasSettingsPermission(false);
+        }
+    }
     
     if (isLoading) {
         return <LoadingScreen option="option1"/>;
     }
 
+    if (isUnauthorized) {
+        return <div style={{ color: 'red' }}>You do not have access to this album.</div>;
+    }
+    
     return (
         <div>
             {/* Header */}
             <StandardHeader 
                 title={album?.title!} 
                 mainButtonText={hasUploadPermission ? "Upload" : ""}
-                mainButtonIcon={hasUploadPermission ? <IoSettingsOutline/> : null}
+                mainButtonIcon={hasSettingsPermission ? <IoSettingsOutline/> : null}
                 arrowBack={searchResult.length>0}
                 onClickArrowButton={()=>setSearchResult([])}
                 hasRigthButtons={searchResult.length==0}
