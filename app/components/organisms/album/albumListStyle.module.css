@@ -47,4 +47,5 @@
 .photo{
     object-fit: contain;
     max-width: 100%;
+    cursor: pointer;
 }
